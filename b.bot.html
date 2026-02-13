@@ -1,0 +1,1914 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>B-Bot • Apple-style Apps + Skins + Social + Games + App Store</title>
+<style>
+  :root{
+    --bg:#000;
+    --text:rgba(255,255,255,.92);
+    --muted:rgba(255,255,255,.62);
+
+    /* B-Bot skin vars */
+    --botGlow: rgba(38,230,255,.55);
+    --botShellA:#ffffff;
+    --botShellB:#eaeaea;
+    --faceA:#05070c;
+    --faceB:#000000;
+    --eye:#00ccff;
+    --wallA:#0b0d14;
+    --wallB:#0e1120;
+
+    --glass: rgba(255,255,255,.08);
+    --glass2: rgba(255,255,255,.05);
+    --stroke: rgba(255,255,255,.10);
+
+    --accent:#26e6ff;
+    --danger:#ff4d7d;
+
+    --radius: 24px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 800px at 60% 20%, rgba(38,230,255,.12), transparent 55%),
+      radial-gradient(1000px 700px at 30% 80%, rgba(255,92,255,.10), transparent 55%),
+      linear-gradient(180deg,#070811,#000);
+    color:var(--text);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+    display:grid;
+    place-items:center;
+    overflow:hidden;
+  }
+
+  /* ===== Scene + Device ===== */
+  .scene{
+    width:min(980px, 96vw);
+    height:min(860px, 94vh);
+    position:relative;
+    perspective:1200px;
+    display:grid;
+    place-items:center;
+  }
+  .hint{
+    position:absolute; left:50%; transform:translateX(-50%);
+    bottom:10px;
+    color:rgba(255,255,255,.40);
+    font-size:12px;
+    user-select:none;
+    text-align:center;
+    width:min(900px, 92vw);
+    pointer-events:none;
+  }
+
+  .botWrap{
+    width:520px; height:820px;
+    position:relative;
+    transform-style:preserve-3d;
+    transform: rotateX(var(--rX,0deg)) rotateY(var(--rY,0deg)) translateY(var(--lift,0px));
+    transition: transform .12s ease-out;
+  }
+  .shadow{
+    position:absolute; left:30px; right:30px; bottom:30px; height:140px;
+    background: radial-gradient(closest-side, rgba(0,0,0,.75), rgba(0,0,0,0));
+    filter: blur(12px);
+    transform: translateZ(-60px);
+    pointer-events:none;
+  }
+
+  .bbot{
+    position:absolute; inset:0;
+    border-radius: 250px 250px 160px 160px;
+    background:
+      radial-gradient(120% 70% at var(--shineX,55%) var(--shineY,30%),
+        rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
+      linear-gradient(180deg, var(--botShellA), var(--botShellB));
+    box-shadow:
+      0 28px 90px rgba(0,0,0,.55),
+      0 0 170px var(--botGlow);
+    overflow:hidden;
+  }
+  .bbot:before{
+    content:"";
+    position:absolute; inset:14px;
+    border-radius: 235px 235px 146px 146px;
+    background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.09),
+      inset 0 18px 30px rgba(0,0,0,.10);
+    pointer-events:none;
+  }
+
+  .face{
+    position:absolute;
+    top:62px; left:50%;
+    transform:translateX(-50%);
+    width: 400px; height: 170px;
+    border-radius: 92px;
+    background:
+      radial-gradient(120% 100% at 50% 0%, rgba(38,230,255,.18), transparent 60%),
+      linear-gradient(180deg, var(--faceA), var(--faceB));
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.10),
+      inset 0 22px 34px rgba(0,0,0,.55),
+      0 18px 28px rgba(0,0,0,.35);
+    display:flex;
+    justify-content:space-evenly;
+    align-items:center;
+    overflow:hidden;
+  }
+  .eye{
+    width: 68px; height: 112px;
+    border-radius: 40px;
+    background:
+      radial-gradient(circle at 35% 35%, rgba(255,255,255,.40), rgba(255,255,255,0) 55%),
+      radial-gradient(circle at 50% 50%, color-mix(in srgb, var(--eye) 92%, #ffffff 8%), rgba(0,0,0,0) 70%),
+      rgba(0,0,0,.15);
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.10),
+      0 0 22px color-mix(in srgb, var(--eye) 45%, transparent);
+    position:relative;
+  }
+  .pupil{
+    position:absolute; inset:26px 18px;
+    border-radius: 26px;
+    background:
+      radial-gradient(circle at 40% 35%, rgba(255,255,255,.45), rgba(255,255,255,0) 55%),
+      radial-gradient(circle at 50% 50%, rgba(0,0,0,.92), rgba(0,0,0,.35) 70%);
+    transform: translate(var(--px,0px), var(--py,0px));
+    transition: transform .08s linear;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+  }
+  .blink{
+    position:absolute; inset:0;
+    background: linear-gradient(180deg, rgba(0,0,0,.2), rgba(0,0,0,.85));
+    transform: scaleY(0);
+    transform-origin:center;
+    pointer-events:none;
+  }
+
+  .screen{
+    position:absolute;
+    left:50%; transform:translateX(-50%);
+    bottom: 120px;
+    width: 430px; height: 420px;
+    border-radius: 68px;
+    background:
+      radial-gradient(140% 120% at var(--shineX,55%) var(--shineY,30%), rgba(255,255,255,.12), rgba(255,255,255,0) 55%),
+      linear-gradient(180deg, var(--wallB), var(--wallA));
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.10),
+      inset 0 24px 44px rgba(0,0,0,.55);
+    overflow:hidden;
+  }
+  .screen::after{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(105deg, rgba(255,255,255,.10), rgba(255,255,255,0) 38%),
+      radial-gradient(120% 90% at var(--shineX,55%) var(--shineY,30%), rgba(255,255,255,.10), rgba(255,255,255,0) 55%);
+    mix-blend-mode:screen;
+    opacity:.65;
+    pointer-events:none;
+  }
+
+  /* ===== iOS-like UI ===== */
+  .ui{ position:absolute; inset:0; display:flex; flex-direction:column; }
+  .status{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 12px 14px;
+    background: rgba(0,0,0,.22);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    font-size:12px;
+    color:var(--muted);
+  }
+  .pill{
+    display:flex; align-items:center; gap:10px;
+    padding: 6px 10px;
+    border-radius:999px;
+    background: rgba(255,255,255,.06);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+  }
+  .sig{
+    width:14px; height:10px;
+    background: linear-gradient(90deg, rgba(255,255,255,.25), rgba(255,255,255,.75));
+    clip-path: polygon(0 100%,0 60%,18% 60%,18% 100%,34% 100%,34% 40%,52% 40%,52% 100%,68% 100%,68% 20%,86% 20%,86% 100%,100% 100%,100% 0,0 0);
+    opacity:.75;
+  }
+  .bat{ width:24px; height:12px; border-radius:3px; border:1px solid rgba(255,255,255,.30); position:relative; overflow:hidden;}
+  .bat:after{content:""; position:absolute; right:-4px; top:3px; width:3px; height:6px; background:rgba(255,255,255,.30); border-radius:1px;}
+  .batFill{height:100%; width:100%; background: linear-gradient(90deg, rgba(38,230,255,.35), rgba(38,230,255,.90)); transition: width .25s ease;}
+  .home{
+    flex:1;
+    padding: 16px;
+    overflow:auto;
+    scroll-behavior:smooth;
+  }
+  .home::-webkit-scrollbar{width:8px}
+  .home::-webkit-scrollbar-thumb{background:rgba(255,255,255,.10); border-radius:999px}
+
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding-bottom: 12px;
+  }
+  .icon{
+    user-select:none;
+    cursor:pointer;
+    border-radius: 22px;
+    padding: 12px 10px 10px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)),
+      rgba(0,0,0,.18);
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.06),
+      0 12px 18px rgba(0,0,0,.35);
+    backdrop-filter: blur(12px);
+    transition: transform .12s ease, box-shadow .12s ease;
+    text-align:center;
+  }
+  .icon:active{transform:scale(.98)}
+  .icon:hover{transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), 0 16px 22px rgba(0,0,0,.44)}
+  .glyph{
+    width: 54px; height: 54px;
+    margin: 0 auto 8px;
+    border-radius: 18px;
+    display:grid; place-items:center;
+    font-size: 26px;
+    background:
+      radial-gradient(circle at 35% 35%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
+      linear-gradient(180deg, rgba(38,230,255,.26), rgba(38,230,255,.06));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.10);
+  }
+  .name{
+    font-size: 11px;
+    color: rgba(255,255,255,.86);
+    letter-spacing:.2px;
+  }
+
+  .dock{
+    padding: 12px 14px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 12px;
+    background: rgba(0,0,0,.28);
+    border-top: 1px solid rgba(255,255,255,.06);
+    backdrop-filter: blur(14px);
+  }
+  .dockBtn{
+    width: 48px; height: 48px;
+    border-radius: 18px;
+    display:grid; place-items:center;
+    cursor:pointer;
+    background: rgba(255,255,255,.07);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.07), 0 12px 18px rgba(0,0,0,.35);
+    user-select:none;
+    transition: transform .12s ease;
+  }
+  .dockBtn:active{transform:scale(.98)}
+  .dots{flex:1; display:flex; justify-content:center; gap:8px; opacity:.75}
+  .dot{width:6px;height:6px;border-radius:50%; background: rgba(255,255,255,.25)}
+  .dot.on{background: rgba(38,230,255,.85); box-shadow:0 0 10px rgba(38,230,255,.45)}
+
+  /* ===== App Panels ===== */
+  .panel{
+    position:absolute; inset:0;
+    display:none;
+    flex-direction:column;
+    background: rgba(5,6,10,.60);
+    backdrop-filter: blur(16px);
+  }
+  .panel.on{display:flex}
+  .topbar{
+    display:flex; align-items:center; gap:10px;
+    padding: 12px 12px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    background: rgba(0,0,0,.22);
+  }
+  .back{
+    width: 40px; height: 40px;
+    border-radius: 16px;
+    display:grid; place-items:center;
+    cursor:pointer;
+    background: rgba(255,255,255,.07);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.07);
+    user-select:none;
+  }
+  .title{font-weight:700; letter-spacing:.2px}
+  .content{flex:1; overflow:auto; padding: 12px}
+  .card{
+    border-radius: 20px;
+    padding: 12px;
+    background: rgba(255,255,255,.06);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+    margin-bottom: 10px;
+  }
+  .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .row > *{flex: 0 0 auto}
+  .btn{
+    border:0;
+    color: rgba(0,0,0,.92);
+    font-weight:700;
+    padding: 10px 12px;
+    border-radius: 16px;
+    cursor:pointer;
+    background: linear-gradient(180deg, rgba(38,230,255,.96), rgba(38,230,255,.55));
+    box-shadow: 0 12px 18px rgba(0,0,0,.28);
+    transition: transform .12s ease;
+  }
+  .btn:active{transform:scale(.98)}
+  .btn.secondary{
+    color: rgba(255,255,255,.9);
+    background: rgba(255,255,255,.08);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+  }
+  .btn.danger{
+    color: rgba(255,255,255,.92);
+    background: rgba(255,77,125,.18);
+    box-shadow: inset 0 0 0 1px rgba(255,77,125,.25);
+  }
+  input, textarea, select{
+    width:100%;
+    padding: 10px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(0,0,0,.24);
+    color: rgba(255,255,255,.92);
+    outline:none;
+    font-family: inherit;
+  }
+  textarea{min-height: 92px; resize: vertical}
+
+  /* Social */
+  .post{
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .avatar{
+    width: 38px; height: 38px;
+    border-radius: 14px;
+    background:
+      radial-gradient(circle at 35% 35%, rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
+      linear-gradient(180deg, rgba(255,92,255,.32), rgba(38,230,255,.18));
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.10);
+    flex: 0 0 auto;
+  }
+  .post h4{margin:0; font-size:13px; line-height:1.15}
+  .post p{margin:6px 0 8px; color:rgba(255,255,255,.78); font-size:13px; line-height:1.35}
+  .actions{display:flex; gap:10px; align-items:center; color:rgba(255,255,255,.62); font-size:12px; user-select:none}
+  .chip{
+    cursor:pointer;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+  }
+  .chip.on{
+    background: rgba(255,77,125,.16);
+    box-shadow: inset 0 0 0 1px rgba(255,77,125,.25);
+  }
+
+  /* Chat */
+  .log{
+    height: 260px;
+    overflow:auto;
+    padding: 10px;
+    border-radius: 20px;
+    background: rgba(0,0,0,.22);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+  }
+  .bubble{
+    max-width: 86%;
+    padding: 10px 12px;
+    border-radius: 18px;
+    font-size: 13px;
+    line-height: 1.35;
+    margin: 6px 0;
+    box-shadow: 0 10px 16px rgba(0,0,0,.25);
+  }
+  .me{ margin-left:auto; background: rgba(38,230,255,.18); box-shadow: inset 0 0 0 1px rgba(38,230,255,.25); }
+  .bot{ margin-right:auto; background: rgba(255,255,255,.08); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+
+  /* Music EQ */
+  .eq{ height: 30px; display:flex; gap:4px; align-items:flex-end; padding: 8px 10px; border-radius: 16px;
+       background: rgba(255,255,255,.06); box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+  .bar{ width: 6px; height: 6px; border-radius: 8px; background: rgba(38,230,255,.9); opacity:.85;
+        transform-origin: bottom; animation: bounce 1.1s ease-in-out infinite; animation-play-state: paused; }
+  .bar:nth-child(2){animation-delay:.1s}
+  .bar:nth-child(3){animation-delay:.2s}
+  .bar:nth-child(4){animation-delay:.3s}
+  .bar:nth-child(5){animation-delay:.4s}
+  .bar:nth-child(6){animation-delay:.5s}
+  @keyframes bounce{0%,100%{transform:scaleY(.35)} 50%{transform:scaleY(1.35)}}
+
+  /* Game canvas */
+  canvas{
+    width:100%;
+    height:auto;
+    border-radius: 18px;
+    background: rgba(0,0,0,.25);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+  }
+
+  /* Modal */
+  .modalWrap{
+    position:absolute; inset:0;
+    display:none;
+    background: rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
+    align-items:center;
+    justify-content:center;
+    padding: 14px;
+  }
+  .modalWrap.on{display:flex}
+  .modal{
+    width: min(420px, 100%);
+    border-radius: 22px;
+    background: rgba(15,16,22,.92);
+    box-shadow: 0 28px 90px rgba(0,0,0,.60);
+    border: 1px solid rgba(255,255,255,.08);
+    overflow:hidden;
+  }
+  .modalHead{
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 12px 14px;
+    background: rgba(255,255,255,.06);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    font-weight:700;
+  }
+  .x{cursor:pointer; user-select:none; padding: 6px 10px; border-radius: 12px; background: rgba(255,255,255,.06)}
+
+  /* Responsive */
+  @media (max-width: 560px){
+    .botWrap{ width: 430px; height: 740px; transform: rotateX(var(--rX,0deg)) rotateY(var(--rY,0deg)) scale(.92) translateY(var(--lift,0px));}
+    .face{ width: 340px; height: 150px; }
+    .screen{ width: 380px; height: 400px; }
+    .grid{ grid-template-columns: repeat(4, 1fr); }
+  }
+</style>
+</head>
+<body>
+  <div class="scene" id="scene">
+    <div class="botWrap" id="botWrap">
+      <div class="shadow"></div>
+
+      <div class="bbot" id="bbot">
+        <div class="face" id="face">
+          <div class="eye"><div class="pupil" id="p1"></div></div>
+          <div class="eye"><div class="pupil" id="p2"></div></div>
+          <div class="blink" id="blink"></div>
+        </div>
+
+        <div class="screen" id="screen">
+          <div class="ui">
+            <div class="status">
+              <div class="pill">
+                <div class="sig" aria-hidden="true"></div>
+                <span id="clock">12:00</span>
+              </div>
+              <div class="pill">
+                <span id="wifi">Wi-Fi</span>
+                <div class="bat"><div class="batFill" id="batFill"></div></div>
+                <span id="batTxt">100%</span>
+              </div>
+            </div>
+
+            <div class="home" id="home">
+              <div class="grid" id="grid"></div>
+
+              <div class="card">
+                <div style="font-weight:800; margin-bottom:6px">B-Bot OS</div>
+                <div style="color:rgba(255,255,255,.72); font-size:13px; line-height:1.4">
+                  Skins, Social, Games, AI Chat, and an App Store where you can install + create mini-games.
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="row" style="justify-content:space-between">
+                  <div>
+                    <div style="font-weight:800; margin-bottom:4px">Mode</div>
+                    <div style="color:rgba(255,255,255,.72); font-size:13px">Switch the bot’s look instantly.</div>
+                  </div>
+                  <div class="row">
+                    <button class="btn secondary" data-mode="render">Render</button>
+                    <button class="btn secondary" data-mode="ron">Ron</button>
+                    <button class="btn secondary" data-mode="toy">Toy</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="dock">
+              <div class="dockBtn" id="homeBtn" title="Home">⌂</div>
+              <div class="dots" aria-hidden="true">
+                <div class="dot on"></div><div class="dot"></div><div class="dot"></div>
+              </div>
+              <div class="dockBtn" id="tiltBtn" title="Tilt">⤾</div>
+            </div>
+
+            <!-- PANELS -->
+            <div class="panel" id="skinsPanel">
+              <div class="topbar">
+                <div class="back" data-back>←</div>
+                <div class="title">Skins</div>
+              </div>
+              <div class="content">
+                <div class="card">
+                  <div style="font-weight:800; margin-bottom:8px">Bot Shell</div>
+                  <div class="row">
+                    <button class="btn secondary" data-skin="aqua">Aqua</button>
+                    <button class="btn secondary" data-skin="magenta">Magenta</button>
+                    <button class="btn secondary" data-skin="neon">Neon</button>
+                    <button class="btn secondary" data-skin="steel">Steel</button>
+                    <button class="btn secondary" data-skin="classic">Classic</button>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div style="font-weight:800; margin-bottom:8px">Screen Wallpaper</div>
+                  <div class="row">
+                    <button class="btn secondary" data-wall="deep">Deep Space</button>
+                    <button class="btn secondary" data-wall="sunset">Neon Sunset</button>
+                    <button class="btn secondary" data-wall="mint">Mint Glow</button>
+                    <button class="btn secondary" data-wall="mono">Midnight</button>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div style="font-weight:800; margin-bottom:8px">Eye Color</div>
+                  <div class="row">
+                    <button class="btn secondary" data-eye="#00ccff">Cyan</button>
+                    <button class="btn secondary" data-eye="#ffffff">White</button>
+                    <button class="btn secondary" data-eye="#00ff88">Neon</button>
+                    <button class="btn secondary" data-eye="#ff77ff">Pink</button>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div style="font-weight:800; margin-bottom:8px">Glow Strength</div>
+                  <input id="glowRange" type="range" min="0" max="100" value="55" />
+                  <div style="color:rgba(255,255,255,.62); font-size:12px; margin-top:8px">
+                    Higher glow = more “premium showroom” look.
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="row" style="justify-content:space-between">
+                    <div>
+                      <div style="font-weight:800; margin-bottom:4px">Reset</div>
+                      <div style="color:rgba(255,255,255,.70); font-size:13px">Back to default skin.</div>
+                    </div>
+                    <button class="btn danger" id="resetSkin">Reset</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" id="socialPanel">
+              <div class="topbar">
+                <div class="back" data-back>←</div>
+                <div class="title">Social • B-Feed</div>
+              </div>
+              <div class="content">
+                <div class="card">
+                  <div style="font-weight:800; margin-bottom:8px">Create a post</div>
+                  <textarea id="newPost" placeholder="Say something… (fake social)"></textarea>
+                  <div class="row" style="margin-top:10px; justify-content:flex-end">
+                    <button class="btn" id="postBtn">Post</button>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div style="display:flex; justify-content:space-between; align-items:center">
+                    <div>
+                      <div style="font-weight:800; margin-bottom:4px">Trending</div>
+                      <div style="color:rgba(255,255,255,.70); font-size:13px">#B-BotSkins • #GameDrops • #FriendshipOS</div>
+                    </div>
+                    <button class="btn secondary" id="refreshFeed">Refresh</button>
+                  </div>
+                </div>
+
+                <div id="feed"></div>
+              </div>
+            </div>
+
+            <div class="panel" id="gamesPanel">
+              <div class="topbar">
+                <div class="back" data-back>←</div>
+                <div class="title">Games</div>
+              </div>
+              <div class="content">
+                <div class="card">
+                  <div style="font-weight:800; margin-bottom:6px">Installed Games</div>
+                  <div style="color:rgba(255,255,255,.70); font-size:13px; line-height:1.4">
+                    Open the <b>App Store</b> to install more, or create your own.
+                  </div>
+                </div>
+                <div id="installedGamesList"></div>
+
+                <div class="card">
+                  <div style="font-weight:800; margin-bottom:8px">Built-in Mini-Games</div>
+                  <div class="row">
+                    <button class="btn secondary" data-open-game="reaction">⚡ Reaction</button>
+                    <button class="btn secondary" data-open-game="memory">🧠 Memory</button>
+                    <button class="btn secondary" data-open-game="runner">🏃 Runner</button>
+                  </div>
+                </div>
+
+                <div class="card" id="gameArea" style="display:none">
+                  <div class="row" style="justify-content:space-between; align-items:center">
+                    <div style="font-weight:800" id="gameTitle">Game</div>
+                    <button class="btn secondary" id="closeGame">Close</button>
+                  </div>
+                  <div style="height:10px"></div>
+                  <div id="gameMount"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" id="aiPanel">
+              <div class="topbar">
+                <div class="back" data-back>←</div>
+                <div class="title">AI Chat (Local)</div>
+              </div>
+              <div class="content">
+                <div class="card">
+                  <div class="log" id="log"></div>
+                  <div style="height:10px"></div>
+                  <div class="row" style="flex-wrap:nowrap">
+                    <input id="msg" placeholder="Talk to B-Bot…" />
+                    <button class="btn" id="sendBtn" style="min-width:92px">Send</button>
+                  </div>
+                  <div style="color:rgba(255,255,255,.55); font-size:12px; margin-top:10px; line-height:1.4">
+                    Offline smart replies. You can swap this to a real AI API later.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" id="musicPanel">
+              <div class="topbar">
+                <div class="back" data-back>←</div>
+                <div class="title">Music</div>
+              </div>
+              <div class="content">
+                <div class="card">
+                  <div style="font-weight:800; margin-bottom:6px">Now Playing</div>
+                  <div style="color:rgba(255,255,255,.72); font-size:13px">Neon Drift (demo)</div>
+                  <div class="row" style="margin-top:10px">
+                    <button class="btn" id="playBtn">Play</button>
+                    <button class="btn secondary" id="pauseBtn">Pause</button>
+                  </div>
+                  <div style="height:10px"></div>
+                  <div class="eq" aria-hidden="true">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                  </div>
+                  <audio id="audio" preload="auto" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel" id="storePanel">
+              <div class="topbar">
+                <div class="back" data-back>←</div>
+                <div class="title">App Store</div>
+              </div>
+              <div class="content">
+                <div class="card">
+                  <div style="font-weight:800; margin-bottom:6px">Create a game (simple)</div>
+                  <div style="color:rgba(255,255,255,.72); font-size:13px; line-height:1.4">
+                    Make a quick tap/click game. It becomes an app you can install to your home screen.
+                  </div>
+                  <div style="height:10px"></div>
+                  <label style="font-size:12px; color:rgba(255,255,255,.65)">Game name</label>
+                  <input id="cgName" placeholder="e.g., Coin Tap Deluxe" />
+                  <div style="height:8px"></div>
+                  <label style="font-size:12px; color:rgba(255,255,255,.65)">Goal clicks</label>
+                  <input id="cgGoal" type="number" min="5" max="200" value="30" />
+                  <div style="height:8px"></div>
+                  <label style="font-size:12px; color:rgba(255,255,255,.65)">Time limit (seconds)</label>
+                  <input id="cgTime" type="number" min="5" max="120" value="20" />
+                  <div style="height:10px"></div>
+                  <div class="row" style="justify-content:flex-end">
+                    <button class="btn" id="createGameBtn">Create + Add to Store</button>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="row" style="justify-content:space-between; align-items:center">
+                    <div>
+                      <div style="font-weight:800; margin-bottom:4px">Browse Store</div>
+                      <div style="color:rgba(255,255,255,.72); font-size:13px">Install games to your Home screen.</div>
+                    </div>
+                    <button class="btn secondary" id="resetStore">Reset Store</button>
+                  </div>
+                </div>
+
+                <div id="storeList"></div>
+              </div>
+            </div>
+
+            <!-- Modal for comments -->
+            <div class="modalWrap" id="modalWrap">
+              <div class="modal">
+                <div class="modalHead">
+                  <div id="modalTitle">Comments</div>
+                  <div class="x" id="modalClose">✕</div>
+                </div>
+                <div style="padding:12px">
+                  <div id="modalBody" style="max-height:260px; overflow:auto"></div>
+                  <div style="height:10px"></div>
+                  <input id="commentInput" placeholder="Write a comment…" />
+                  <div style="height:10px"></div>
+                  <div class="row" style="justify-content:flex-end">
+                    <button class="btn" id="addCommentBtn">Add</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- simple speaker “slot” -->
+        <div style="position:absolute; left:50%; transform:translateX(-50%);
+                    bottom:50px; width: 360px; height: 64px; border-radius: 34px;
+                    background: rgba(0,0,0,.16);
+                    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), inset 0 20px 26px rgba(0,0,0,.55);">
+          <div style="position:absolute; inset: 20px 60px;
+                      border-radius: 999px;
+                      background: repeating-linear-gradient(90deg, rgba(255,255,255,.20) 0px, rgba(255,255,255,.20) 2px, rgba(0,0,0,.40) 2px, rgba(0,0,0,.40) 6px);
+                      opacity:.55;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hint">Move mouse to tilt • Install games in App Store • Create posts + comments in Social • Skins change bot + wallpaper</div>
+  </div>
+
+<script>
+/* =========================
+   DATA + STORAGE
+========================= */
+const LS_KEY = "bbot_os_v1";
+const defaultState = {
+  installedApps: ["skins","social","games","store","ai","music"],
+  installedGames: ["reaction","memory","runner"], // includes built-ins
+  userGames: [], // {id,name,goal,time,createdAt}
+  skin: { shell:"classic", wall:"deep", eye:"#00ccff", glow:55, mode:"render" },
+  social: {
+    posts: [
+      {id: uid(), name:"TrendBot", text:"🔥 New Skin Pack dropped. Make your B-Bot look premium.", likes:2, liked:false, comments:["That glow is insane.","Need neon next."]},
+      {id: uid(), name:"ByteBuddy", text:"🎮 App Store is live! Install games or make your own.", likes:5, liked:false, comments:["Making a tap game rn."]},
+      {id: uid(), name:"B-Bot HQ", text:"🧠 AI got smarter. Ask it for a joke.", likes:3, liked:false, comments:[]},
+    ]
+  }
+};
+
+let state = loadState();
+
+/* =========================
+   DOM
+========================= */
+const scene = document.getElementById("scene");
+const botWrap = document.getElementById("botWrap");
+const root = document.documentElement;
+
+const p1 = document.getElementById("p1");
+const p2 = document.getElementById("p2");
+const blink = document.getElementById("blink");
+
+const clockEl = document.getElementById("clock");
+const batFill = document.getElementById("batFill");
+const batTxt  = document.getElementById("batTxt");
+
+const grid = document.getElementById("grid");
+const homeBtn = document.getElementById("homeBtn");
+const tiltBtn = document.getElementById("tiltBtn");
+
+const panels = {
+  skins: document.getElementById("skinsPanel"),
+  social: document.getElementById("socialPanel"),
+  games: document.getElementById("gamesPanel"),
+  store: document.getElementById("storePanel"),
+  ai: document.getElementById("aiPanel"),
+  music: document.getElementById("musicPanel"),
+};
+
+const feedEl = document.getElementById("feed");
+const newPost = document.getElementById("newPost");
+
+const installedGamesList = document.getElementById("installedGamesList");
+const gameArea = document.getElementById("gameArea");
+const gameTitle = document.getElementById("gameTitle");
+const gameMount = document.getElementById("gameMount");
+const closeGame = document.getElementById("closeGame");
+
+const storeList = document.getElementById("storeList");
+const cgName = document.getElementById("cgName");
+const cgGoal = document.getElementById("cgGoal");
+const cgTime = document.getElementById("cgTime");
+
+const modalWrap = document.getElementById("modalWrap");
+const modalClose = document.getElementById("modalClose");
+const modalTitle = document.getElementById("modalTitle");
+const modalBody = document.getElementById("modalBody");
+const commentInput = document.getElementById("commentInput");
+const addCommentBtn = document.getElementById("addCommentBtn");
+let activePostId = null;
+
+/* =========================
+   HOME ICONS (Apple-style)
+========================= */
+const APP_META = {
+  skins: {name:"Skins", icon:"🎨"},
+  social:{name:"Social", icon:"📱"},
+  games: {name:"Games", icon:"🎮"},
+  store: {name:"App Store", icon:"🛍️"},
+  ai:    {name:"AI Chat", icon:"🤖"},
+  music: {name:"Music", icon:"🎵"},
+};
+
+function renderHome(){
+  grid.innerHTML = "";
+
+  // Render main apps
+  state.installedApps.forEach(appId=>{
+    const meta = APP_META[appId];
+    if(!meta) return;
+    grid.appendChild(makeIcon(meta.icon, meta.name, ()=>openPanel(appId)));
+  });
+
+  // Render installed user games as apps (extra icons)
+  const installedUserGameIds = state.userGames
+    .filter(g=>state.installedGames.includes(g.id))
+    .map(g=>g.id);
+
+  state.userGames
+    .filter(g=>installedUserGameIds.includes(g.id))
+    .forEach(g=>{
+      grid.appendChild(makeIcon("🕹️", g.name, ()=>{
+        openPanel("games");
+        setTimeout(()=>launchUserGame(g.id), 180);
+      }));
+    });
+}
+
+function makeIcon(emoji, label, onClick){
+  const d = document.createElement("div");
+  d.className="icon";
+  d.innerHTML = `<div class="glyph">${emoji}</div><div class="name">${escapeHtml(label)}</div>`;
+  d.addEventListener("click", onClick);
+  return d;
+}
+
+/* =========================
+   PANELS NAV
+========================= */
+function openPanel(id){
+  Object.values(panels).forEach(p=>p.classList.remove("on"));
+  panels[id]?.classList.add("on");
+  // refresh on open
+  if(id==="social") renderFeed();
+  if(id==="store") renderStore();
+  if(id==="games") renderInstalledGames();
+}
+function goHome(){
+  Object.values(panels).forEach(p=>p.classList.remove("on"));
+  stopAnyGame();
+}
+homeBtn.addEventListener("click", goHome);
+document.querySelectorAll("[data-back]").forEach(b=>b.addEventListener("click", goHome));
+
+/* Mode buttons in home card */
+document.querySelectorAll("[data-mode]").forEach(btn=>{
+  btn.addEventListener("click", ()=>setMode(btn.getAttribute("data-mode")));
+});
+
+/* =========================
+   3D TILT + EYES
+========================= */
+let tiltEnabled = true;
+
+function setVars(rx, ry, lift, sx, sy){
+  root.style.setProperty("--rX", `${rx}deg`);
+  root.style.setProperty("--rY", `${ry}deg`);
+  root.style.setProperty("--lift", `${lift}px`);
+  root.style.setProperty("--shineX", `${sx}%`);
+  root.style.setProperty("--shineY", `${sy}%`);
+}
+function onMouseMove(e){
+  if(!tiltEnabled) return;
+  const r = scene.getBoundingClientRect();
+  const nx = (e.clientX - r.left) / r.width;
+  const ny = (e.clientY - r.top) / r.height;
+  const ry = (nx - 0.5) * 18;
+  const rx = (0.5 - ny) * 16;
+  setVars(rx, ry, -6, nx*100, ny*100);
+  updatePupils(nx, ny);
+}
+scene.addEventListener("mousemove", onMouseMove);
+scene.addEventListener("mouseleave", ()=>setVars(0,0,0,55,30));
+
+tiltBtn.addEventListener("click", ()=>{
+  tiltEnabled = !tiltEnabled;
+  tiltBtn.textContent = tiltEnabled ? "⤾" : "⛔";
+  if(!tiltEnabled) setVars(0,0,0,55,30);
+});
+
+function updatePupils(nx, ny){
+  const dx = (nx - 0.5) * 10;
+  const dy = (ny - 0.5) * 8;
+  p1.style.setProperty("--px", `${dx}px`);
+  p1.style.setProperty("--py", `${dy}px`);
+  p2.style.setProperty("--px", `${dx}px`);
+  p2.style.setProperty("--py", `${dy}px`);
+}
+function doBlink(){
+  blink.animate(
+    [{transform:"scaleY(0)"},{transform:"scaleY(1)"},{transform:"scaleY(0)"}],
+    {duration: 160, easing:"ease-in-out"}
+  );
+}
+setInterval(()=>{ if(Math.random()>.55) doBlink(); }, 1800);
+
+/* =========================
+   CLOCK + BATTERY
+========================= */
+function updateClock(){
+  const d = new Date();
+  clockEl.textContent = `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+}
+updateClock(); setInterval(updateClock, 1000);
+
+let battery = 100;
+setInterval(()=>{
+  battery = Math.max(0, battery - 1);
+  batTxt.textContent = `${battery}%`;
+  batFill.style.width = `${battery}%`;
+}, 6000);
+
+/* =========================
+   SKINS (shell + wallpaper + eyes + glow)
+========================= */
+document.querySelectorAll("[data-skin]").forEach(b=>{
+  b.addEventListener("click", ()=>setShell(b.getAttribute("data-skin")));
+});
+document.querySelectorAll("[data-wall]").forEach(b=>{
+  b.addEventListener("click", ()=>setWall(b.getAttribute("data-wall")));
+});
+document.querySelectorAll("[data-eye]").forEach(b=>{
+  b.addEventListener("click", ()=>setEye(b.getAttribute("data-eye")));
+});
+document.getElementById("glowRange").addEventListener("input", (e)=>{
+  state.skin.glow = Number(e.target.value);
+  applyGlow();
+  saveState();
+});
+document.getElementById("resetSkin").addEventListener("click", ()=>{
+  state.skin = {...defaultState.skin};
+  applySkinAll();
+  saveState();
+});
+
+function setShell(which){
+  state.skin.shell = which;
+  applyShell();
+  saveState();
+}
+function setWall(which){
+  state.skin.wall = which;
+  applyWall();
+  saveState();
+}
+function setEye(color){
+  state.skin.eye = color;
+  root.style.setProperty("--eye", color);
+  saveState();
+}
+function applyShell(){
+  const s = state.skin.shell;
+  if(s==="aqua"){
+    root.style.setProperty("--botShellA","#f7feff");
+    root.style.setProperty("--botShellB","#d8fbff");
+    root.style.setProperty("--botGlow","rgba(38,230,255,.65)");
+  } else if(s==="magenta"){
+    root.style.setProperty("--botShellA","#fff7ff");
+    root.style.setProperty("--botShellB","#f0d7ff");
+    root.style.setProperty("--botGlow","rgba(255,92,255,.55)");
+  } else if(s==="neon"){
+    root.style.setProperty("--botShellA","#f7fff8");
+    root.style.setProperty("--botShellB","#d9ffe9");
+    root.style.setProperty("--botGlow","rgba(0,255,136,.55)");
+  } else if(s==="steel"){
+    root.style.setProperty("--botShellA","#f1f4f8");
+    root.style.setProperty("--botShellB","#cfd6e2");
+    root.style.setProperty("--botGlow","rgba(180,210,255,.42)");
+  } else { // classic
+    root.style.setProperty("--botShellA","#ffffff");
+    root.style.setProperty("--botShellB","#eaeaea");
+    root.style.setProperty("--botGlow","rgba(38,230,255,.55)");
+  }
+  applyGlow();
+}
+function applyWall(){
+  const w = state.skin.wall;
+  if(w==="deep"){
+    root.style.setProperty("--wallA","#0b0d14");
+    root.style.setProperty("--wallB","#0e1120");
+  } else if(w==="sunset"){
+    root.style.setProperty("--wallA","#160b18");
+    root.style.setProperty("--wallB","#0b1220");
+  } else if(w==="mint"){
+    root.style.setProperty("--wallA","#091216");
+    root.style.setProperty("--wallB","#0b1b18");
+  } else { // mono
+    root.style.setProperty("--wallA","#07070a");
+    root.style.setProperty("--wallB","#0b0b10");
+  }
+}
+function applyGlow(){
+  const v = state.skin.glow; // 0..100
+  const a = v/100;
+  // amplify current botGlow by alpha feel
+  const glow = getComputedStyle(root).getPropertyValue("--botGlow").trim();
+  // quick trick: just adjust shadow strength on bbot element
+  const b = document.getElementById("bbot");
+  b.style.boxShadow = `0 28px 90px rgba(0,0,0,.55), 0 0 ${Math.round(90+200*a)}px ${glow}`;
+}
+function setMode(mode){
+  state.skin.mode = mode;
+  // mode tweaks: face + eye style + glow vibe
+  if(mode==="render"){
+    root.style.setProperty("--faceA","#05070c");
+    root.style.setProperty("--faceB","#000000");
+    setEye(state.skin.eye || "#00ccff");
+  }
+  if(mode==="ron"){
+    root.style.setProperty("--faceA","#0a0a0f");
+    root.style.setProperty("--faceB","#000000");
+    // Ron-ish: slightly whiter eyes by default
+    if(state.skin.eye === "#00ccff") setEye("#ffffff");
+  }
+  if(mode==="toy"){
+    root.style.setProperty("--faceA","#070a12");
+    root.style.setProperty("--faceB","#000000");
+    if(state.skin.eye === "#ffffff") setEye("#0099ff");
+  }
+  saveState();
+}
+function applySkinAll(){
+  document.getElementById("glowRange").value = state.skin.glow ?? 55;
+  applyShell();
+  applyWall();
+  root.style.setProperty("--eye", state.skin.eye || "#00ccff");
+  setMode(state.skin.mode || "render");
+}
+applySkinAll();
+
+/* =========================
+   SOCIAL (better feed)
+========================= */
+function renderFeed(){
+  feedEl.innerHTML = "";
+  const posts = state.social.posts.slice().reverse(); // newest first
+
+  posts.forEach(p=>{
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <div class="post">
+        <div class="avatar"></div>
+        <div style="flex:1">
+          <h4>${escapeHtml(p.name)} <span style="color:rgba(255,255,255,.45); font-weight:600">• just now</span></h4>
+          <p>${escapeHtml(p.text)}</p>
+          <div class="actions">
+            <div class="chip ${p.liked ? "on":""}" data-like="${p.id}">♥ ${p.liked ? "Liked":"Like"} • ${p.likes}</div>
+            <div class="chip" data-comment="${p.id}">💬 Comments • ${p.comments.length}</div>
+            <div class="chip" data-share="${p.id}">↗ Share</div>
+          </div>
+        </div>
+      </div>
+    `;
+    feedEl.appendChild(card);
+  });
+
+  feedEl.querySelectorAll("[data-like]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.getAttribute("data-like");
+      const post = state.social.posts.find(x=>x.id===id);
+      if(!post) return;
+      post.liked = !post.liked;
+      post.likes += post.liked ? 1 : -1;
+      saveState();
+      renderFeed();
+    });
+  });
+
+  feedEl.querySelectorAll("[data-comment]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.getAttribute("data-comment");
+      openComments(id);
+    });
+  });
+
+  feedEl.querySelectorAll("[data-share]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      // fun fake share
+      toast("Shared to B-Net ✨");
+    });
+  });
+}
+
+document.getElementById("postBtn").addEventListener("click", ()=>{
+  const txt = newPost.value.trim();
+  if(!txt) return;
+  state.social.posts.push({id:uid(), name:"You", text:txt, likes:0, liked:false, comments:[]});
+  newPost.value = "";
+  saveState();
+  renderFeed();
+});
+
+document.getElementById("refreshFeed").addEventListener("click", ()=>{
+  // add a random “bot” post for fun
+  const botPosts = [
+    "✨ New app suggestions: try building a tap game in the App Store.",
+    "🎮 Daily challenge: beat 220ms in Reaction.",
+    "🎨 Skin tip: Neon + Mint wallpaper looks crazy clean.",
+    "🧠 Ask AI: “tell me a joke” 😉"
+  ];
+  state.social.posts.push({id:uid(), name:"B-Bot", text:botPosts[Math.floor(Math.random()*botPosts.length)], likes:0, liked:false, comments:[]});
+  saveState();
+  renderFeed();
+});
+
+/* Comments modal */
+function openComments(postId){
+  activePostId = postId;
+  const post = state.social.posts.find(p=>p.id===postId);
+  if(!post) return;
+
+  modalTitle.textContent = `Comments • ${post.name}`;
+  modalBody.innerHTML = post.comments.length
+    ? post.comments.map(c=>`<div class="card" style="margin:0 0 8px; padding:10px">${escapeHtml(c)}</div>`).join("")
+    : `<div style="color:rgba(255,255,255,.65); font-size:13px">No comments yet.</div>`;
+
+  commentInput.value = "";
+  modalWrap.classList.add("on");
+}
+modalClose.addEventListener("click", ()=>modalWrap.classList.remove("on"));
+modalWrap.addEventListener("click", (e)=>{ if(e.target===modalWrap) modalWrap.classList.remove("on"); });
+
+addCommentBtn.addEventListener("click", ()=>{
+  const txt = commentInput.value.trim();
+  if(!txt || !activePostId) return;
+  const post = state.social.posts.find(p=>p.id===activePostId);
+  if(!post) return;
+  post.comments.push(txt);
+  saveState();
+  openComments(activePostId);
+  renderFeed();
+});
+
+/* =========================
+   AI CHAT (offline)
+========================= */
+const log = document.getElementById("log");
+const msg = document.getElementById("msg");
+const sendBtn = document.getElementById("sendBtn");
+
+function bubble(text, cls){
+  const b = document.createElement("div");
+  b.className = `bubble ${cls}`;
+  b.textContent = text;
+  log.appendChild(b);
+  log.scrollTop = log.scrollHeight;
+}
+function fakeAI(user){
+  const t = user.toLowerCase();
+  const mode = state.skin.mode || "render";
+  const tone = mode==="ron" ? "awkward-funny" : (mode==="toy" ? "cheery" : "pro");
+  const replies = [
+    {k:["hello","hi","hey"], r: tone==="pro" ? "Hello. I’m B-Bot. Want skins, games, or social?" :
+                     tone==="cheery" ? "Hiii! Let’s play or customize! 💙" :
+                     "Hi… I’m totally normal and not weird. What’s up?"},
+    {k:["skin","skins","color","colour","wallpaper"], r:"Open Skins → pick Shell + Wallpaper + Eye color. Try Neon + Mint."},
+    {k:["app store","store","download","install"], r:"Open App Store → tap Install on any game. You can also create your own tap game."},
+    {k:["game","games","reaction","memory","runner"], r:"Games: Reaction (fast), Memory (match), Runner (dodge). Want a new one? Make it in the App Store."},
+    {k:["joke"], r: tone==="ron" ? "Okay… joke… Why did the robot blush? Because it saw your… *data.* 😳" :
+                  "Why did the robot get promoted? It had outstanding performance reviews."},
+  ];
+  for(const rule of replies){
+    if(rule.k.some(w=>t.includes(w))) return rule.r;
+  }
+  if(t.endsWith("?")) return "Tell me what you’re trying to do, and I’ll guide you step-by-step.";
+  return "Nice. Want me to suggest a skin combo or a new game idea?";
+}
+function send(){
+  const text = msg.value.trim();
+  if(!text) return;
+  bubble("You: " + text, "me");
+  msg.value = "";
+
+  const typing = document.createElement("div");
+  typing.className = "bubble bot";
+  typing.textContent = "B-Bot: thinking…";
+  log.appendChild(typing);
+  log.scrollTop = log.scrollHeight;
+
+  setTimeout(()=>{
+    typing.remove();
+    bubble("B-Bot: " + fakeAI(text), "bot");
+  }, 380 + Math.random()*420);
+}
+sendBtn.addEventListener("click", send);
+msg.addEventListener("keydown", (e)=>{ if(e.key==="Enter") send(); });
+bubble("B-Bot: Hi! Try the App Store to install or create games.", "bot");
+
+/* =========================
+   MUSIC
+========================= */
+const audio = document.getElementById("audio");
+const playBtn = document.getElementById("playBtn");
+const pauseBtn = document.getElementById("pauseBtn");
+const bars = [...document.querySelectorAll(".bar")];
+
+function setEQ(on){ bars.forEach(b=>b.style.animationPlayState = on ? "running":"paused"); }
+playBtn.addEventListener("click", async ()=>{
+  try{ await audio.play(); setEQ(true); } catch(e){ setEQ(false); }
+});
+pauseBtn.addEventListener("click", ()=>{ audio.pause(); setEQ(false); });
+audio.addEventListener("ended", ()=>setEQ(false));
+
+/* =========================
+   GAMES (more games + installed list)
+========================= */
+document.querySelectorAll("[data-open-game]").forEach(btn=>{
+  btn.addEventListener("click", ()=>launchBuiltIn(btn.getAttribute("data-open-game")));
+});
+closeGame.addEventListener("click", stopAnyGame);
+
+let currentGameStop = null;
+
+function stopAnyGame(){
+  if(currentGameStop) { try{currentGameStop();}catch(e){} }
+  currentGameStop = null;
+  gameArea.style.display = "none";
+  gameMount.innerHTML = "";
+}
+
+function renderInstalledGames(){
+  installedGamesList.innerHTML = "";
+
+  // built-ins show as open buttons
+  const built = [
+    {id:"reaction", name:"Reaction", desc:"Tap when you see GO."},
+    {id:"memory", name:"Memory", desc:"Match pairs."},
+    {id:"runner", name:"Runner", desc:"Dodge blocks."},
+  ];
+
+  const builtCard = document.createElement("div");
+  builtCard.className="card";
+  builtCard.innerHTML = `<div style="font-weight:800; margin-bottom:8px">Open</div>`;
+  const row = document.createElement("div");
+  row.className="row";
+  built.forEach(g=>{
+    const b = document.createElement("button");
+    b.className="btn secondary";
+    b.textContent = g.name;
+    b.addEventListener("click", ()=>launchBuiltIn(g.id));
+    row.appendChild(b);
+  });
+  builtCard.appendChild(row);
+  installedGamesList.appendChild(builtCard);
+
+  // user-installed games
+  const installedUser = state.userGames.filter(g=>state.installedGames.includes(g.id));
+  if(installedUser.length){
+    const card = document.createElement("div");
+    card.className="card";
+    card.innerHTML = `<div style="font-weight:800; margin-bottom:8px">Your Games</div>`;
+    installedUser.forEach(g=>{
+      const line = document.createElement("div");
+      line.style.display="flex";
+      line.style.justifyContent="space-between";
+      line.style.gap="10px";
+      line.style.alignItems="center";
+      line.style.padding="10px 0";
+      line.style.borderTop="1px solid rgba(255,255,255,.06)";
+      line.innerHTML = `
+        <div>
+          <div style="font-weight:700">${escapeHtml(g.name)}</div>
+          <div style="color:rgba(255,255,255,.62); font-size:12px">Goal ${g.goal} • ${g.time}s</div>
+        </div>
+      `;
+      const btns = document.createElement("div");
+      btns.className="row";
+      const open = document.createElement("button");
+      open.className="btn secondary";
+      open.textContent="Open";
+      open.addEventListener("click", ()=>launchUserGame(g.id));
+      const uninstall = document.createElement("button");
+      uninstall.className="btn danger";
+      uninstall.textContent="Uninstall";
+      uninstall.addEventListener("click", ()=>{
+        state.installedGames = state.installedGames.filter(id=>id!==g.id);
+        saveState(); renderInstalledGames(); renderHome();
+      });
+      btns.appendChild(open); btns.appendChild(uninstall);
+      line.appendChild(btns);
+      card.appendChild(line);
+    });
+    installedGamesList.appendChild(card);
+  }
+}
+
+function launchBuiltIn(id){
+  stopAnyGame();
+  gameArea.style.display = "block";
+  if(id==="reaction") return mountReaction();
+  if(id==="memory") return mountMemory();
+  if(id==="runner") return mountRunner();
+}
+
+function launchUserGame(id){
+  stopAnyGame();
+  const g = state.userGames.find(x=>x.id===id);
+  if(!g) return;
+  gameArea.style.display = "block";
+  gameTitle.textContent = g.name;
+  mountTapGame(g);
+}
+
+/* --- Reaction game --- */
+function mountReaction(){
+  gameTitle.textContent = "Reaction";
+  const box = document.createElement("div");
+  box.className="card";
+  box.innerHTML = `
+    <div style="font-weight:800; margin-bottom:8px">Tap when it says GO</div>
+    <button class="btn" id="rBtn" style="width:100%">Start</button>
+    <div id="rMsg" style="margin-top:10px; color:rgba(255,255,255,.75); font-size:13px"></div>
+  `;
+  gameMount.appendChild(box);
+
+  let waiting=false, startT=0, timer=null;
+  const rBtn = box.querySelector("#rBtn");
+  const rMsg = box.querySelector("#rMsg");
+
+  function reset(){
+    waiting=false;
+    rBtn.disabled=false;
+    rBtn.textContent="Start";
+  }
+
+  rBtn.addEventListener("click", ()=>{
+    if(!waiting){
+      waiting=true;
+      rBtn.disabled=true;
+      rBtn.textContent="Wait…";
+      rMsg.textContent="Get ready…";
+      timer=setTimeout(()=>{
+        rBtn.disabled=false;
+        rBtn.textContent="GO!";
+        startT=performance.now();
+        rMsg.textContent="TAP NOW!";
+      }, 900+Math.random()*2200);
+    } else {
+      const rt = Math.round(performance.now()-startT);
+      rMsg.textContent = `Reaction: ${rt} ms`;
+      reset();
+    }
+  });
+
+  rBtn.addEventListener("mousedown", ()=>{
+    if(waiting && rBtn.disabled){
+      clearTimeout(timer);
+      rMsg.textContent="Too soon! Try again.";
+      reset();
+    }
+  });
+
+  currentGameStop = ()=>{ clearTimeout(timer); };
+}
+
+/* --- Memory game (simple 4x4) --- */
+function mountMemory(){
+  gameTitle.textContent = "Memory";
+  const symbols = ["🍓","🍋","🍇","🍒","🍀","⭐","⚡","💎"];
+  const deck = shuffle([...symbols,...symbols]).map((s,i)=>({id:i, s, flipped:false, matched:false}));
+
+  const wrap = document.createElement("div");
+  wrap.className="card";
+  wrap.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px">
+      <div>
+        <div style="font-weight:800">Match the pairs</div>
+        <div style="color:rgba(255,255,255,.70); font-size:13px">Tap cards to reveal.</div>
+      </div>
+      <button class="btn secondary" id="mReset">Reset</button>
+    </div>
+    <div style="height:10px"></div>
+    <div id="mGrid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px"></div>
+    <div id="mMsg" style="margin-top:10px; color:rgba(255,255,255,.75); font-size:13px"></div>
+  `;
+  gameMount.appendChild(wrap);
+
+  const mGrid = wrap.querySelector("#mGrid");
+  const mMsg = wrap.querySelector("#mMsg");
+  const mReset = wrap.querySelector("#mReset");
+
+  let open = [];
+  let lock = false;
+
+  function render(){
+    mGrid.innerHTML="";
+    deck.forEach(card=>{
+      const b = document.createElement("button");
+      b.className="btn secondary";
+      b.style.height="62px";
+      b.style.borderRadius="18px";
+      b.style.width="100%";
+      b.style.display="grid";
+      b.style.placeItems="center";
+      b.style.fontSize="20px";
+      b.style.color="rgba(255,255,255,.92)";
+      b.style.background = card.flipped || card.matched ? "rgba(38,230,255,.16)" : "rgba(255,255,255,.08)";
+      b.textContent = (card.flipped || card.matched) ? card.s : "❑";
+      b.disabled = lock || card.matched;
+      b.addEventListener("click", ()=>flip(card.id));
+      mGrid.appendChild(b);
+    });
+
+    const matchedCount = deck.filter(c=>c.matched).length;
+    if(matchedCount === deck.length) mMsg.textContent="Perfect! You matched them all 🎉";
+  }
+
+  function flip(id){
+    if(lock) return;
+    const c = deck.find(x=>x.id===id);
+    if(!c || c.flipped || c.matched) return;
+    c.flipped = true;
+    open.push(c);
+    if(open.length===2){
+      lock = true;
+      setTimeout(()=>{
+        if(open[0].s === open[1].s){
+          open[0].matched = open[1].matched = true;
+          mMsg.textContent = "Match! ✅";
+        }else{
+          open[0].flipped = open[1].flipped = false;
+          mMsg.textContent = "Nope. Try again.";
+        }
+        open = [];
+        lock = false;
+        render();
+      }, 520);
+    }
+    render();
+  }
+
+  mReset.addEventListener("click", ()=>{
+    const fresh = shuffle([...symbols,...symbols]);
+    deck.forEach((c,i)=>{ c.s = fresh[i]; c.flipped=false; c.matched=false; });
+    open=[]; lock=false; mMsg.textContent="";
+    render();
+  });
+
+  render();
+  currentGameStop = ()=>{};
+}
+
+/* --- Runner game (simple canvas dodge) --- */
+function mountRunner(){
+  gameTitle.textContent = "Runner";
+  const wrap = document.createElement("div");
+  wrap.className="card";
+  wrap.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px">
+      <div>
+        <div style="font-weight:800">Dodge the blocks</div>
+        <div style="color:rgba(255,255,255,.70); font-size:13px">Use ← → or A/D.</div>
+      </div>
+      <button class="btn" id="runStart">Start</button>
+    </div>
+    <div style="height:10px"></div>
+    <canvas id="cv" width="380" height="260"></canvas>
+    <div id="runMsg" style="margin-top:10px; color:rgba(255,255,255,.75); font-size:13px"></div>
+  `;
+  gameMount.appendChild(wrap);
+
+  const cv = wrap.querySelector("#cv");
+  const ctx = cv.getContext("2d");
+  const runStart = wrap.querySelector("#runStart");
+  const runMsg = wrap.querySelector("#runMsg");
+
+  let raf=null, running=false;
+  let player = {x: 190, y: 232, w: 26, h: 20, vx:0};
+  let blocks = [];
+  let score = 0;
+
+  function reset(){
+    player.x=190; player.vx=0;
+    blocks=[]; score=0;
+    runMsg.textContent="";
+  }
+
+  function spawn(){
+    const w = 18 + Math.random()*34;
+    blocks.push({x: Math.random()*(cv.width-w), y: -20, w, h: 14+Math.random()*18, vy: 2.4+Math.random()*2.2});
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+
+    // bg line
+    ctx.globalAlpha=0.35;
+    ctx.fillStyle="#ffffff";
+    ctx.fillRect(0, 255, cv.width, 2);
+    ctx.globalAlpha=1;
+
+    // player
+    ctx.fillStyle="#26e6ff";
+    ctx.fillRect(player.x, player.y, player.w, player.h);
+
+    // blocks
+    ctx.fillStyle="#ff4d7d";
+    blocks.forEach(b=>ctx.fillRect(b.x,b.y,b.w,b.h));
+
+    // score
+    ctx.fillStyle="rgba(255,255,255,.85)";
+    ctx.font="14px -apple-system,Segoe UI,Roboto";
+    ctx.fillText("Score: "+score, 10, 18);
+  }
+
+  function step(){
+    if(!running) return;
+
+    // physics
+    player.x += player.vx;
+    player.x = Math.max(0, Math.min(cv.width-player.w, player.x));
+
+    // blocks
+    if(Math.random() < 0.05) spawn();
+    blocks.forEach(b=>b.y += b.vy);
+    blocks = blocks.filter(b=>b.y < cv.height+30);
+
+    // collisions
+    for(const b of blocks){
+      if(rectHit(player,b)){
+        running=false;
+        runMsg.textContent = `Game over. Score ${score}.`;
+        runStart.textContent="Restart";
+        break;
+      }
+    }
+    if(running) score++;
+
+    draw();
+    raf = requestAnimationFrame(step);
+  }
+
+  function onKey(e, down){
+    const key = e.key.toLowerCase();
+    if(key==="arrowleft" || key==="a") player.vx = down ? -4.2 : (player.vx<0 ? 0 : player.vx);
+    if(key==="arrowright"|| key==="d") player.vx = down ?  4.2 : (player.vx>0 ? 0 : player.vx);
+  }
+  const kd = e=>onKey(e,true);
+  const ku = e=>onKey(e,false);
+
+  runStart.addEventListener("click", ()=>{
+    reset();
+    running=true;
+    runStart.textContent="Running…";
+    draw();
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(step);
+  });
+
+  window.addEventListener("keydown", kd);
+  window.addEventListener("keyup", ku);
+
+  draw();
+
+  currentGameStop = ()=>{
+    running=false;
+    cancelAnimationFrame(raf);
+    window.removeEventListener("keydown", kd);
+    window.removeEventListener("keyup", ku);
+  };
+}
+
+/* --- User-created Tap Game --- */
+function mountTapGame(g){
+  gameTitle.textContent = g.name;
+  const wrap = document.createElement("div");
+  wrap.className="card";
+  wrap.innerHTML = `
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px">
+      <div>
+        <div style="font-weight:800">${escapeHtml(g.name)}</div>
+        <div style="color:rgba(255,255,255,.70); font-size:13px">Reach ${g.goal} taps in ${g.time}s.</div>
+      </div>
+      <button class="btn" id="tgStart">Start</button>
+    </div>
+    <div style="height:10px"></div>
+    <button class="btn" id="tapBtn" style="width:100%; height:90px; font-size:18px" disabled>Tap!</button>
+    <div style="height:10px"></div>
+    <div class="row" style="justify-content:space-between">
+      <div style="color:rgba(255,255,255,.80); font-size:13px">Taps: <b id="tgTaps">0</b> / ${g.goal}</div>
+      <div style="color:rgba(255,255,255,.80); font-size:13px">Time: <b id="tgTime">${g.time}</b>s</div>
+    </div>
+    <div id="tgMsg" style="margin-top:10px; color:rgba(255,255,255,.75); font-size:13px"></div>
+  `;
+  gameMount.appendChild(wrap);
+
+  const tgStart = wrap.querySelector("#tgStart");
+  const tapBtn = wrap.querySelector("#tapBtn");
+  const tgTaps = wrap.querySelector("#tgTaps");
+  const tgTime = wrap.querySelector("#tgTime");
+  const tgMsg = wrap.querySelector("#tgMsg");
+
+  let taps=0, left=g.time, timer=null, running=false;
+
+  function stop(){
+    running=false;
+    clearInterval(timer);
+    tapBtn.disabled=true;
+    tgStart.textContent="Start";
+  }
+
+  tgStart.addEventListener("click", ()=>{
+    if(running) return;
+    taps=0; left=g.time;
+    tgTaps.textContent="0";
+    tgTime.textContent=left;
+    tgMsg.textContent="";
+    tapBtn.disabled=false;
+    running=true;
+    tgStart.textContent="Running…";
+
+    timer=setInterval(()=>{
+      left--;
+      tgTime.textContent=left;
+      if(left<=0){
+        stop();
+        if(taps>=g.goal) tgMsg.textContent = `WIN! You hit ${taps}/${g.goal} 🎉`;
+        else tgMsg.textContent = `Try again. You got ${taps}/${g.goal}.`;
+      }
+    },1000);
+  });
+
+  tapBtn.addEventListener("click", ()=>{
+    if(!running) return;
+    taps++;
+    tgTaps.textContent=taps;
+    if(taps>=g.goal){
+      stop();
+      tgMsg.textContent = `WIN! You hit ${taps}/${g.goal} 🎉`;
+    }
+  });
+
+  currentGameStop = ()=>{ clearInterval(timer); };
+}
+
+/* Helpers */
+function rectHit(a,b){
+  return a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y;
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+/* =========================
+   APP STORE (download + create games)
+========================= */
+const BUILTIN_STORE_GAMES = [
+  {id:"tap_star", name:"Star Tap", goal:40, time:20, builtIn:true, desc:"Tap fast to collect stars."},
+  {id:"tap_coins", name:"Coin Rush", goal:55, time:25, builtIn:true, desc:"Beat the timer with max taps."},
+  {id:"tap_ultra", name:"Ultra Tap X", goal:70, time:30, builtIn:true, desc:"Hard mode tap challenge."},
+];
+
+function storeCatalog(){
+  // includes built-in catalog + user created games (as store items)
+  const userStore = state.userGames.map(g=>({id:g.id, name:g.name, goal:g.goal, time:g.time, builtIn:false, desc:`User game • Goal ${g.goal} in ${g.time}s`}));
+  // ensure built-ins are present
+  return [...BUILTIN_STORE_GAMES, ...userStore];
+}
+
+function renderStore(){
+  storeList.innerHTML = "";
+  const catalog = storeCatalog();
+
+  catalog.forEach(item=>{
+    const installed = state.installedGames.includes(item.id);
+    const card = document.createElement("div");
+    card.className="card";
+    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px">
+        <div style="display:flex; gap:12px; align-items:center">
+          <div style="width:52px; height:52px; border-radius:18px; display:grid; place-items:center; font-size:24px;
+                      background: rgba(255,255,255,.08); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);">🕹️</div>
+          <div>
+            <div style="font-weight:800">${escapeHtml(item.name)}</div>
+            <div style="color:rgba(255,255,255,.70); font-size:13px">${escapeHtml(item.desc)}</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center">
+          <button class="btn ${installed ? "secondary" : ""}" data-install="${item.id}">
+            ${installed ? "Installed" : "Install"}
+          </button>
+        </div>
+      </div>
+    `;
+    storeList.appendChild(card);
+  });
+
+  storeList.querySelectorAll("[data-install]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const id = btn.getAttribute("data-install");
+      const installed = state.installedGames.includes(id);
+      if(installed){
+        toast("Already installed.");
+        return;
+      }
+      // install it
+      state.installedGames.push(id);
+
+      // if this is a built-in store item and not yet in userGames, add as userGames too so it can run
+      const item = storeCatalog().find(x=>x.id===id);
+      if(item && BUILTIN_STORE_GAMES.some(x=>x.id===id)){
+        if(!state.userGames.some(g=>g.id===id)){
+          state.userGames.push({id:item.id, name:item.name, goal:item.goal, time:item.time, createdAt: Date.now()});
+        }
+      }
+
+      saveState();
+      renderStore();
+      renderInstalledGames();
+      renderHome();
+      toast("Installed!");
+    });
+  });
+}
+
+document.getElementById("createGameBtn").addEventListener("click", ()=>{
+  const name = cgName.value.trim();
+  const goal = Number(cgGoal.value);
+  const time = Number(cgTime.value);
+
+  if(!name) return toast("Give your game a name.");
+  if(!(goal>=5 && goal<=200)) return toast("Goal must be 5–200.");
+  if(!(time>=5 && time<=120)) return toast("Time must be 5–120.");
+
+  const id = "user_" + uid();
+  state.userGames.push({id, name, goal, time, createdAt: Date.now()});
+  saveState();
+
+  cgName.value="";
+  toast("Added to Store. Install it below 👇");
+  renderStore();
+});
+
+document.getElementById("resetStore").addEventListener("click", ()=>{
+  // keep skins/social; reset games store content to defaults
+  state.userGames = [];
+  state.installedGames = ["reaction","memory","runner"];
+  saveState();
+  renderStore(); renderInstalledGames(); renderHome();
+  toast("Store reset.");
+});
+
+/* =========================
+   HOME APP ICONS click targets
+========================= */
+function openAppById(appId){
+  if(appId in panels) openPanel(appId);
+}
+
+/* =========================
+   DEFAULT ICON GRID SETUP
+========================= */
+renderHome();
+
+/* =========================
+   QUICK OPEN via icon meta
+========================= */
+function handleIconOpen(appId){
+  openAppById(appId);
+}
+
+/* =========================
+   MODE (Render/Ron/Toy)
+========================= */
+function applyModeFromState(){
+  setMode(state.skin.mode || "render");
+}
+applyModeFromState();
+
+/* =========================
+   STORAGE HELPERS
+========================= */
+function loadState(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return structuredClone(defaultState);
+    const parsed = JSON.parse(raw);
+
+    // minimal merge
+    const merged = structuredClone(defaultState);
+    Object.assign(merged, parsed);
+    merged.skin = {...defaultState.skin, ...(parsed.skin||{})};
+    merged.social = {...defaultState.social, ...(parsed.social||{})};
+    merged.social.posts = (parsed.social?.posts && Array.isArray(parsed.social.posts))
+      ? parsed.social.posts
+      : structuredClone(defaultState.social.posts);
+
+    merged.userGames = Array.isArray(parsed.userGames) ? parsed.userGames : [];
+    merged.installedApps = Array.isArray(parsed.installedApps) ? parsed.installedApps : defaultState.installedApps.slice();
+    merged.installedGames = Array.isArray(parsed.installedGames) ? parsed.installedGames : defaultState.installedGames.slice();
+    return merged;
+  }catch{
+    return structuredClone(defaultState);
+  }
+}
+function saveState(){
+  localStorage.setItem(LS_KEY, JSON.stringify(state));
+}
+
+/* =========================
+   SAFE TEXT
+========================= */
+function escapeHtml(s){
+  return String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+function uid(){
+  return Math.random().toString(16).slice(2) + Date.now().toString(16);
+}
+
+/* =========================
+   TOAST
+========================= */
+let toastTimer=null;
+function toast(text){
+  clearTimeout(toastTimer);
+  let el = document.getElementById("toast");
+  if(!el){
+    el = document.createElement("div");
+    el.id="toast";
+    el.style.position="absolute";
+    el.style.left="50%";
+    el.style.bottom="84px";
+    el.style.transform="translateX(-50%)";
+    el.style.padding="10px 12px";
+    el.style.borderRadius="16px";
+    el.style.background="rgba(15,16,22,.92)";
+    el.style.border="1px solid rgba(255,255,255,.10)";
+    el.style.boxShadow="0 20px 60px rgba(0,0,0,.50)";
+    el.style.color="rgba(255,255,255,.88)";
+    el.style.fontSize="13px";
+    el.style.zIndex="50";
+    el.style.opacity="0";
+    el.style.transition="opacity .15s ease, transform .15s ease";
+    document.getElementById("screen").appendChild(el);
+  }
+  el.textContent=text;
+  el.style.opacity="1";
+  el.style.transform="translateX(-50%) translateY(-4px)";
+  toastTimer=setTimeout(()=>{
+    el.style.opacity="0";
+    el.style.transform="translateX(-50%) translateY(0px)";
+  }, 1300);
+}
+
+/* =========================
+   FIRST RENDERS
+========================= */
+renderFeed();
+renderStore();
+renderInstalledGames();
+
+/* =========================
+   FIX: mode buttons + store + skins state on load
+========================= */
+document.getElementById("glowRange").value = state.skin.glow ?? 55;
+
+/* Done */
+</script>
+</body>
+</html>
