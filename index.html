@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>B-Bot • Apple-style Apps + Skins + Social + Games + App Store</title>
+<title>B-Bot OS • Ultra • + Browser</title>
 <style>
   :root{
     --bg:#000;
     --text:rgba(255,255,255,.92);
     --muted:rgba(255,255,255,.62);
 
-    /* B-Bot skin vars */
+    /* B-Bot skin vars (same system) */
     --botGlow: rgba(38,230,255,.55);
     --botShellA:#ffffff;
     --botShellB:#eaeaea;
@@ -20,14 +20,14 @@
     --wallA:#0b0d14;
     --wallB:#0e1120;
 
-    --glass: rgba(255,255,255,.08);
-    --glass2: rgba(255,255,255,.05);
-    --stroke: rgba(255,255,255,.10);
-
     --accent:#26e6ff;
     --danger:#ff4d7d;
 
-    --radius: 24px;
+    --rX: 0deg;
+    --rY: 0deg;
+    --lift: 0px;
+    --shineX: 55%;
+    --shineY: 30%;
   }
 
   *{box-sizing:border-box}
@@ -39,13 +39,13 @@
       radial-gradient(1000px 700px at 30% 80%, rgba(255,92,255,.10), transparent 55%),
       linear-gradient(180deg,#070811,#000);
     color:var(--text);
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;
     display:grid;
     place-items:center;
     overflow:hidden;
   }
 
-  /* ===== Scene + Device ===== */
+  /* ===== Scene + Device (same vibe) ===== */
   .scene{
     width:min(980px, 96vw);
     height:min(860px, 94vh);
@@ -69,9 +69,13 @@
     width:520px; height:820px;
     position:relative;
     transform-style:preserve-3d;
-    transform: rotateX(var(--rX,0deg)) rotateY(var(--rY,0deg)) translateY(var(--lift,0px));
+    transform:
+      rotateX(var(--rX))
+      rotateY(var(--rY))
+      translateY(var(--lift));
     transition: transform .12s ease-out;
   }
+
   .shadow{
     position:absolute; left:30px; right:30px; bottom:30px; height:140px;
     background: radial-gradient(closest-side, rgba(0,0,0,.75), rgba(0,0,0,0));
@@ -84,7 +88,7 @@
     position:absolute; inset:0;
     border-radius: 250px 250px 160px 160px;
     background:
-      radial-gradient(120% 70% at var(--shineX,55%) var(--shineY,30%),
+      radial-gradient(120% 70% at var(--shineX) var(--shineY),
         rgba(255,255,255,.22), rgba(255,255,255,0) 55%),
       linear-gradient(180deg, var(--botShellA), var(--botShellB));
     box-shadow:
@@ -103,6 +107,7 @@
     pointer-events:none;
   }
 
+  /* Face + eyes (same system) */
   .face{
     position:absolute;
     top:62px; left:50%;
@@ -151,6 +156,7 @@
     pointer-events:none;
   }
 
+  /* Screen */
   .screen{
     position:absolute;
     left:50%; transform:translateX(-50%);
@@ -158,7 +164,7 @@
     width: 430px; height: 420px;
     border-radius: 68px;
     background:
-      radial-gradient(140% 120% at var(--shineX,55%) var(--shineY,30%), rgba(255,255,255,.12), rgba(255,255,255,0) 55%),
+      radial-gradient(140% 120% at var(--shineX) var(--shineY), rgba(255,255,255,.12), rgba(255,255,255,0) 55%),
       linear-gradient(180deg, var(--wallB), var(--wallA));
     box-shadow:
       inset 0 0 0 1px rgba(255,255,255,.10),
@@ -170,7 +176,7 @@
     position:absolute; inset:0;
     background:
       linear-gradient(105deg, rgba(255,255,255,.10), rgba(255,255,255,0) 38%),
-      radial-gradient(120% 90% at var(--shineX,55%) var(--shineY,30%), rgba(255,255,255,.10), rgba(255,255,255,0) 55%);
+      radial-gradient(120% 90% at var(--shineX) var(--shineY), rgba(255,255,255,.10), rgba(255,255,255,0) 55%);
     mix-blend-mode:screen;
     opacity:.65;
     pointer-events:none;
@@ -203,6 +209,7 @@
   .bat{ width:24px; height:12px; border-radius:3px; border:1px solid rgba(255,255,255,.30); position:relative; overflow:hidden;}
   .bat:after{content:""; position:absolute; right:-4px; top:3px; width:3px; height:6px; background:rgba(255,255,255,.30); border-radius:1px;}
   .batFill{height:100%; width:100%; background: linear-gradient(90deg, rgba(38,230,255,.35), rgba(38,230,255,.90)); transition: width .25s ease;}
+
   .home{
     flex:1;
     padding: 16px;
@@ -275,7 +282,7 @@
   .dot{width:6px;height:6px;border-radius:50%; background: rgba(255,255,255,.25)}
   .dot.on{background: rgba(38,230,255,.85); box-shadow:0 0 10px rgba(38,230,255,.45)}
 
-  /* ===== App Panels ===== */
+  /* Panels */
   .panel{
     position:absolute; inset:0;
     display:none;
@@ -309,7 +316,6 @@
     margin-bottom: 10px;
   }
   .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-  .row > *{flex: 0 0 auto}
   .btn{
     border:0;
     color: rgba(0,0,0,.92);
@@ -332,7 +338,7 @@
     background: rgba(255,77,125,.18);
     box-shadow: inset 0 0 0 1px rgba(255,77,125,.25);
   }
-  input, textarea, select{
+  input, textarea{
     width:100%;
     padding: 10px 12px;
     border-radius: 16px;
@@ -345,9 +351,7 @@
   textarea{min-height: 92px; resize: vertical}
 
   /* Social */
-  .post{
-    display:flex; gap:10px; align-items:flex-start;
-  }
+  .post{display:flex; gap:10px; align-items:flex-start;}
   .avatar{
     width: 38px; height: 38px;
     border-radius: 14px;
@@ -442,12 +446,56 @@
   }
   .x{cursor:pointer; user-select:none; padding: 6px 10px; border-radius: 12px; background: rgba(255,255,255,.06)}
 
-  /* Responsive */
+  /* Browser */
+  .browserBar{
+    display:flex; gap:8px; align-items:center;
+    padding: 10px;
+    background: rgba(0,0,0,.28);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .bBtn{
+    width:40px; height:40px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.06);
+    color: rgba(255,255,255,.88);
+    cursor:pointer;
+  }
+  .bInput{
+    flex:1;
+    height:40px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(0,0,0,.22);
+    padding: 0 12px;
+    color: rgba(255,255,255,.92);
+    outline:none;
+  }
+  .browserFrame{
+    flex:1;
+    border:none;
+    width:100%;
+    background:#fff;
+  }
+
+  /* Speaker slot */
+  .speaker{
+    position:absolute; left:50%; transform:translateX(-50%);
+    bottom:50px; width: 360px; height: 64px; border-radius: 34px;
+    background: rgba(0,0,0,.16);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), inset 0 20px 26px rgba(0,0,0,.55);
+  }
+  .grill{
+    position:absolute; inset: 20px 60px;
+    border-radius: 999px;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,.20) 0px, rgba(255,255,255,.20) 2px, rgba(0,0,0,.40) 2px, rgba(0,0,0,.40) 6px);
+    opacity:.55;
+  }
+
   @media (max-width: 560px){
-    .botWrap{ width: 430px; height: 740px; transform: rotateX(var(--rX,0deg)) rotateY(var(--rY,0deg)) scale(.92) translateY(var(--lift,0px));}
+    .botWrap{ width: 430px; height: 740px; transform: rotateX(var(--rX)) rotateY(var(--rY)) scale(.92) translateY(var(--lift));}
     .face{ width: 340px; height: 150px; }
     .screen{ width: 380px; height: 400px; }
-    .grid{ grid-template-columns: repeat(4, 1fr); }
   }
 </style>
 </head>
@@ -483,7 +531,7 @@
               <div class="card">
                 <div style="font-weight:800; margin-bottom:6px">B-Bot OS</div>
                 <div style="color:rgba(255,255,255,.72); font-size:13px; line-height:1.4">
-                  Skins, Social, Games, AI Chat, and an App Store where you can install + create mini-games.
+                  Skins, Social, Games, AI, Music, <b>Browser</b>, and an App Store where you can create + install games.
                 </div>
               </div>
 
@@ -510,7 +558,7 @@
               <div class="dockBtn" id="tiltBtn" title="Tilt">⤾</div>
             </div>
 
-            <!-- PANELS -->
+            <!-- SKINS -->
             <div class="panel" id="skinsPanel">
               <div class="topbar">
                 <div class="back" data-back>←</div>
@@ -568,6 +616,7 @@
               </div>
             </div>
 
+            <!-- SOCIAL -->
             <div class="panel" id="socialPanel">
               <div class="topbar">
                 <div class="back" data-back>←</div>
@@ -596,6 +645,7 @@
               </div>
             </div>
 
+            <!-- GAMES -->
             <div class="panel" id="gamesPanel">
               <div class="topbar">
                 <div class="back" data-back>←</div>
@@ -608,6 +658,7 @@
                     Open the <b>App Store</b> to install more, or create your own.
                   </div>
                 </div>
+
                 <div id="installedGamesList"></div>
 
                 <div class="card">
@@ -630,49 +681,7 @@
               </div>
             </div>
 
-            <div class="panel" id="aiPanel">
-              <div class="topbar">
-                <div class="back" data-back>←</div>
-                <div class="title">AI Chat (Local)</div>
-              </div>
-              <div class="content">
-                <div class="card">
-                  <div class="log" id="log"></div>
-                  <div style="height:10px"></div>
-                  <div class="row" style="flex-wrap:nowrap">
-                    <input id="msg" placeholder="Talk to B-Bot…" />
-                    <button class="btn" id="sendBtn" style="min-width:92px">Send</button>
-                  </div>
-                  <div style="color:rgba(255,255,255,.55); font-size:12px; margin-top:10px; line-height:1.4">
-                    Offline smart replies. You can swap this to a real AI API later.
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="panel" id="musicPanel">
-              <div class="topbar">
-                <div class="back" data-back>←</div>
-                <div class="title">Music</div>
-              </div>
-              <div class="content">
-                <div class="card">
-                  <div style="font-weight:800; margin-bottom:6px">Now Playing</div>
-                  <div style="color:rgba(255,255,255,.72); font-size:13px">Neon Drift (demo)</div>
-                  <div class="row" style="margin-top:10px">
-                    <button class="btn" id="playBtn">Play</button>
-                    <button class="btn secondary" id="pauseBtn">Pause</button>
-                  </div>
-                  <div style="height:10px"></div>
-                  <div class="eq" aria-hidden="true">
-                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-                  </div>
-                  <audio id="audio" preload="auto" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-                </div>
-              </div>
-            </div>
-
+            <!-- APP STORE -->
             <div class="panel" id="storePanel">
               <div class="topbar">
                 <div class="back" data-back>←</div>
@@ -680,15 +689,15 @@
               </div>
               <div class="content">
                 <div class="card">
-                  <div style="font-weight:800; margin-bottom:6px">Create a game (simple)</div>
+                  <div style="font-weight:800; margin-bottom:6px">Create a game (Tap template)</div>
                   <div style="color:rgba(255,255,255,.72); font-size:13px; line-height:1.4">
-                    Make a quick tap/click game. It becomes an app you can install to your home screen.
+                    Make a quick tap game. It becomes an installable app on the Home screen.
                   </div>
                   <div style="height:10px"></div>
                   <label style="font-size:12px; color:rgba(255,255,255,.65)">Game name</label>
                   <input id="cgName" placeholder="e.g., Coin Tap Deluxe" />
                   <div style="height:8px"></div>
-                  <label style="font-size:12px; color:rgba(255,255,255,.65)">Goal clicks</label>
+                  <label style="font-size:12px; color:rgba(255,255,255,.65)">Goal taps</label>
                   <input id="cgGoal" type="number" min="5" max="200" value="30" />
                   <div style="height:8px"></div>
                   <label style="font-size:12px; color:rgba(255,255,255,.65)">Time limit (seconds)</label>
@@ -713,7 +722,70 @@
               </div>
             </div>
 
-            <!-- Modal for comments -->
+            <!-- AI -->
+            <div class="panel" id="aiPanel">
+              <div class="topbar">
+                <div class="back" data-back>←</div>
+                <div class="title">AI Chat (Local)</div>
+              </div>
+              <div class="content">
+                <div class="card">
+                  <div class="log" id="log"></div>
+                  <div style="height:10px"></div>
+                  <div class="row" style="flex-wrap:nowrap">
+                    <input id="msg" placeholder="Talk to B-Bot…" />
+                    <button class="btn" id="sendBtn" style="min-width:92px">Send</button>
+                  </div>
+                  <div style="color:rgba(255,255,255,.55); font-size:12px; margin-top:10px; line-height:1.4">
+                    Offline smart replies. Swap to a real AI API later if you want.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- MUSIC -->
+            <div class="panel" id="musicPanel">
+              <div class="topbar">
+                <div class="back" data-back>←</div>
+                <div class="title">Music</div>
+              </div>
+              <div class="content">
+                <div class="card">
+                  <div style="font-weight:800; margin-bottom:6px">Now Playing</div>
+                  <div style="color:rgba(255,255,255,.72); font-size:13px">Neon Drift (demo)</div>
+                  <div class="row" style="margin-top:10px">
+                    <button class="btn" id="playBtn">Play</button>
+                    <button class="btn secondary" id="pauseBtn">Pause</button>
+                  </div>
+                  <div style="height:10px"></div>
+                  <div class="eq" aria-hidden="true">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                  </div>
+                  <audio id="audio" preload="auto" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+                </div>
+              </div>
+            </div>
+
+            <!-- ✅ BROWSER (ADDED, WITHOUT CHANGING UI SYSTEM) -->
+            <div class="panel" id="browserPanel">
+              <div class="topbar">
+                <div class="back" data-back>←</div>
+                <div class="title">Browser</div>
+              </div>
+              <div class="content" style="padding:0; display:flex; flex-direction:column;">
+                <div class="browserBar">
+                  <button class="bBtn" id="bBack" title="Back">⬅</button>
+                  <button class="bBtn" id="bFwd" title="Forward">➡</button>
+                  <button class="bBtn" id="bReload" title="Reload">↻</button>
+                  <input class="bInput" id="bUrl" placeholder="Search or enter a site…" />
+                  <button class="bBtn" id="bHome" title="Home">⌂</button>
+                </div>
+                <iframe class="browserFrame" id="bFrame" src="https://example.com"></iframe>
+              </div>
+            </div>
+
+            <!-- Comments modal -->
             <div class="modalWrap" id="modalWrap">
               <div class="modal">
                 <div class="modalHead">
@@ -735,37 +807,29 @@
           </div>
         </div>
 
-        <!-- simple speaker “slot” -->
-        <div style="position:absolute; left:50%; transform:translateX(-50%);
-                    bottom:50px; width: 360px; height: 64px; border-radius: 34px;
-                    background: rgba(0,0,0,.16);
-                    box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), inset 0 20px 26px rgba(0,0,0,.55);">
-          <div style="position:absolute; inset: 20px 60px;
-                      border-radius: 999px;
-                      background: repeating-linear-gradient(90deg, rgba(255,255,255,.20) 0px, rgba(255,255,255,.20) 2px, rgba(0,0,0,.40) 2px, rgba(0,0,0,.40) 6px);
-                      opacity:.55;"></div>
-        </div>
+        <div class="speaker"><div class="grill"></div></div>
       </div>
     </div>
 
-    <div class="hint">Move mouse to tilt • Install games in App Store • Create posts + comments in Social • Skins change bot + wallpaper</div>
+    <div class="hint">Move mouse to tilt • Apps should all show • Browser is 🌐 • App Store installs games to Home • Some sites block iframes</div>
   </div>
 
 <script>
 /* =========================
-   DATA + STORAGE
+   STATE + STORAGE
 ========================= */
-const LS_KEY = "bbot_os_v1";
+const LS_KEY = "bbot_os_ultra_browser_v1";
 const defaultState = {
-  installedApps: ["skins","social","games","store","ai","music"],
-  installedGames: ["reaction","memory","runner"], // includes built-ins
-  userGames: [], // {id,name,goal,time,createdAt}
+  installedApps: ["skins","social","games","store","ai","music","browser"],
+  installedGames: ["reaction","memory","runner"],
+  userGames: [],
   skin: { shell:"classic", wall:"deep", eye:"#00ccff", glow:55, mode:"render" },
   social: {
     posts: [
       {id: uid(), name:"TrendBot", text:"🔥 New Skin Pack dropped. Make your B-Bot look premium.", likes:2, liked:false, comments:["That glow is insane.","Need neon next."]},
       {id: uid(), name:"ByteBuddy", text:"🎮 App Store is live! Install games or make your own.", likes:5, liked:false, comments:["Making a tap game rn."]},
       {id: uid(), name:"B-Bot HQ", text:"🧠 AI got smarter. Ask it for a joke.", likes:3, liked:false, comments:[]},
+      {id: uid(), name:"WebWave", text:"🌐 Browser app is here. Try example.com or wikipedia.org.", likes:1, liked:false, comments:[]},
     ]
   }
 };
@@ -798,6 +862,7 @@ const panels = {
   store: document.getElementById("storePanel"),
   ai: document.getElementById("aiPanel"),
   music: document.getElementById("musicPanel"),
+  browser: document.getElementById("browserPanel"), // ✅ added
 };
 
 const feedEl = document.getElementById("feed");
@@ -822,42 +887,26 @@ const commentInput = document.getElementById("commentInput");
 const addCommentBtn = document.getElementById("addCommentBtn");
 let activePostId = null;
 
+/* Browser DOM */
+const bFrame = document.getElementById("bFrame");
+const bUrl   = document.getElementById("bUrl");
+const bBack  = document.getElementById("bBack");
+const bFwd   = document.getElementById("bFwd");
+const bReload= document.getElementById("bReload");
+const bHome  = document.getElementById("bHome");
+
 /* =========================
    HOME ICONS (Apple-style)
 ========================= */
 const APP_META = {
-  skins: {name:"Skins", icon:"🎨"},
-  social:{name:"Social", icon:"📱"},
-  games: {name:"Games", icon:"🎮"},
-  store: {name:"App Store", icon:"🛍️"},
-  ai:    {name:"AI Chat", icon:"🤖"},
-  music: {name:"Music", icon:"🎵"},
+  skins:   {name:"Skins", icon:"🎨"},
+  social:  {name:"Social", icon:"📱"},
+  games:   {name:"Games", icon:"🎮"},
+  store:   {name:"App Store", icon:"🛍️"},
+  ai:      {name:"AI Chat", icon:"🤖"},
+  music:   {name:"Music", icon:"🎵"},
+  browser: {name:"Browser", icon:"🌐"}, // ✅ added
 };
-
-function renderHome(){
-  grid.innerHTML = "";
-
-  // Render main apps
-  state.installedApps.forEach(appId=>{
-    const meta = APP_META[appId];
-    if(!meta) return;
-    grid.appendChild(makeIcon(meta.icon, meta.name, ()=>openPanel(appId)));
-  });
-
-  // Render installed user games as apps (extra icons)
-  const installedUserGameIds = state.userGames
-    .filter(g=>state.installedGames.includes(g.id))
-    .map(g=>g.id);
-
-  state.userGames
-    .filter(g=>installedUserGameIds.includes(g.id))
-    .forEach(g=>{
-      grid.appendChild(makeIcon("🕹️", g.name, ()=>{
-        openPanel("games");
-        setTimeout(()=>launchUserGame(g.id), 180);
-      }));
-    });
-}
 
 function makeIcon(emoji, label, onClick){
   const d = document.createElement("div");
@@ -867,12 +916,34 @@ function makeIcon(emoji, label, onClick){
   return d;
 }
 
+function renderHome(){
+  grid.innerHTML = "";
+
+  // render installed apps (main)
+  state.installedApps.forEach(appId=>{
+    const meta = APP_META[appId];
+    if(!meta) return;
+    grid.appendChild(makeIcon(meta.icon, meta.name, ()=>openPanel(appId)));
+  });
+
+  // render installed user games as extra icons on home
+  const installedUser = state.userGames.filter(g=>state.installedGames.includes(g.id));
+  installedUser.forEach(g=>{
+    grid.appendChild(makeIcon("🕹️", g.name, ()=>{
+      openPanel("games");
+      setTimeout(()=>launchUserGame(g.id), 180);
+    }));
+  });
+}
+
 /* =========================
    PANELS NAV
 ========================= */
 function openPanel(id){
   Object.values(panels).forEach(p=>p.classList.remove("on"));
-  panels[id]?.classList.add("on");
+  const el = panels[id];
+  if(el) el.classList.add("on");
+
   // refresh on open
   if(id==="social") renderFeed();
   if(id==="store") renderStore();
@@ -885,16 +956,15 @@ function goHome(){
 homeBtn.addEventListener("click", goHome);
 document.querySelectorAll("[data-back]").forEach(b=>b.addEventListener("click", goHome));
 
-/* Mode buttons in home card */
+/* Mode buttons on home */
 document.querySelectorAll("[data-mode]").forEach(btn=>{
   btn.addEventListener("click", ()=>setMode(btn.getAttribute("data-mode")));
 });
 
 /* =========================
-   3D TILT + EYES
+   3D TILT + REFLECTIONS (kept)
 ========================= */
 let tiltEnabled = true;
-
 function setVars(rx, ry, lift, sx, sy){
   root.style.setProperty("--rX", `${rx}deg`);
   root.style.setProperty("--rY", `${ry}deg`);
@@ -921,6 +991,7 @@ tiltBtn.addEventListener("click", ()=>{
   if(!tiltEnabled) setVars(0,0,0,55,30);
 });
 
+/* Eyes */
 function updatePupils(nx, ny){
   const dx = (nx - 0.5) * 10;
   const dy = (ny - 0.5) * 8;
@@ -954,7 +1025,7 @@ setInterval(()=>{
 }, 6000);
 
 /* =========================
-   SKINS (shell + wallpaper + eyes + glow)
+   SKINS
 ========================= */
 document.querySelectorAll("[data-skin]").forEach(b=>{
   b.addEventListener("click", ()=>setShell(b.getAttribute("data-skin")));
@@ -1009,7 +1080,7 @@ function applyShell(){
     root.style.setProperty("--botShellA","#f1f4f8");
     root.style.setProperty("--botShellB","#cfd6e2");
     root.style.setProperty("--botGlow","rgba(180,210,255,.42)");
-  } else { // classic
+  } else {
     root.style.setProperty("--botShellA","#ffffff");
     root.style.setProperty("--botShellB","#eaeaea");
     root.style.setProperty("--botGlow","rgba(38,230,255,.55)");
@@ -1027,23 +1098,21 @@ function applyWall(){
   } else if(w==="mint"){
     root.style.setProperty("--wallA","#091216");
     root.style.setProperty("--wallB","#0b1b18");
-  } else { // mono
+  } else {
     root.style.setProperty("--wallA","#07070a");
     root.style.setProperty("--wallB","#0b0b10");
   }
 }
 function applyGlow(){
-  const v = state.skin.glow; // 0..100
+  const v = state.skin.glow;
   const a = v/100;
-  // amplify current botGlow by alpha feel
   const glow = getComputedStyle(root).getPropertyValue("--botGlow").trim();
-  // quick trick: just adjust shadow strength on bbot element
   const b = document.getElementById("bbot");
   b.style.boxShadow = `0 28px 90px rgba(0,0,0,.55), 0 0 ${Math.round(90+200*a)}px ${glow}`;
 }
 function setMode(mode){
   state.skin.mode = mode;
-  // mode tweaks: face + eye style + glow vibe
+
   if(mode==="render"){
     root.style.setProperty("--faceA","#05070c");
     root.style.setProperty("--faceB","#000000");
@@ -1052,7 +1121,6 @@ function setMode(mode){
   if(mode==="ron"){
     root.style.setProperty("--faceA","#0a0a0f");
     root.style.setProperty("--faceB","#000000");
-    // Ron-ish: slightly whiter eyes by default
     if(state.skin.eye === "#00ccff") setEye("#ffffff");
   }
   if(mode==="toy"){
@@ -1069,14 +1137,13 @@ function applySkinAll(){
   root.style.setProperty("--eye", state.skin.eye || "#00ccff");
   setMode(state.skin.mode || "render");
 }
-applySkinAll();
 
 /* =========================
-   SOCIAL (better feed)
+   SOCIAL
 ========================= */
 function renderFeed(){
   feedEl.innerHTML = "";
-  const posts = state.social.posts.slice().reverse(); // newest first
+  const posts = state.social.posts.slice().reverse();
 
   posts.forEach(p=>{
     const card = document.createElement("div");
@@ -1111,17 +1178,11 @@ function renderFeed(){
   });
 
   feedEl.querySelectorAll("[data-comment]").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const id = btn.getAttribute("data-comment");
-      openComments(id);
-    });
+    btn.addEventListener("click", ()=>openComments(btn.getAttribute("data-comment")));
   });
 
   feedEl.querySelectorAll("[data-share]").forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      // fun fake share
-      toast("Shared to B-Net ✨");
-    });
+    btn.addEventListener("click", ()=>toast("Shared to B-Net ✨"));
   });
 }
 
@@ -1135,11 +1196,10 @@ document.getElementById("postBtn").addEventListener("click", ()=>{
 });
 
 document.getElementById("refreshFeed").addEventListener("click", ()=>{
-  // add a random “bot” post for fun
   const botPosts = [
-    "✨ New app suggestions: try building a tap game in the App Store.",
+    "✨ Skin tip: Neon + Mint wallpaper is elite.",
     "🎮 Daily challenge: beat 220ms in Reaction.",
-    "🎨 Skin tip: Neon + Mint wallpaper looks crazy clean.",
+    "🌐 Browser tip: some sites block iframes. Try MDN or Wikipedia.",
     "🧠 Ask AI: “tell me a joke” 😉"
   ];
   state.social.posts.push({id:uid(), name:"B-Bot", text:botPosts[Math.floor(Math.random()*botPosts.length)], likes:0, liked:false, comments:[]});
@@ -1176,7 +1236,7 @@ addCommentBtn.addEventListener("click", ()=>{
 });
 
 /* =========================
-   AI CHAT (offline)
+   AI CHAT
 ========================= */
 const log = document.getElementById("log");
 const msg = document.getElementById("msg");
@@ -1194,11 +1254,12 @@ function fakeAI(user){
   const mode = state.skin.mode || "render";
   const tone = mode==="ron" ? "awkward-funny" : (mode==="toy" ? "cheery" : "pro");
   const replies = [
-    {k:["hello","hi","hey"], r: tone==="pro" ? "Hello. I’m B-Bot. Want skins, games, or social?" :
+    {k:["hello","hi","hey"], r: tone==="pro" ? "Hello. I’m B-Bot. Want skins, games, social, or browser?" :
                      tone==="cheery" ? "Hiii! Let’s play or customize! 💙" :
                      "Hi… I’m totally normal and not weird. What’s up?"},
     {k:["skin","skins","color","colour","wallpaper"], r:"Open Skins → pick Shell + Wallpaper + Eye color. Try Neon + Mint."},
-    {k:["app store","store","download","install"], r:"Open App Store → tap Install on any game. You can also create your own tap game."},
+    {k:["app store","store","download","install"], r:"Open App Store → tap Install on any game. Or create your own tap game."},
+    {k:["browser","web","internet"], r:"Open Browser 🌐. Tip: some sites block iframes—try Wikipedia or MDN."},
     {k:["game","games","reaction","memory","runner"], r:"Games: Reaction (fast), Memory (match), Runner (dodge). Want a new one? Make it in the App Store."},
     {k:["joke"], r: tone==="ron" ? "Okay… joke… Why did the robot blush? Because it saw your… *data.* 😳" :
                   "Why did the robot get promoted? It had outstanding performance reviews."},
@@ -1228,7 +1289,6 @@ function send(){
 }
 sendBtn.addEventListener("click", send);
 msg.addEventListener("keydown", (e)=>{ if(e.key==="Enter") send(); });
-bubble("B-Bot: Hi! Try the App Store to install or create games.", "bot");
 
 /* =========================
    MUSIC
@@ -1246,7 +1306,7 @@ pauseBtn.addEventListener("click", ()=>{ audio.pause(); setEQ(false); });
 audio.addEventListener("ended", ()=>setEQ(false));
 
 /* =========================
-   GAMES (more games + installed list)
+   GAMES
 ========================= */
 document.querySelectorAll("[data-open-game]").forEach(btn=>{
   btn.addEventListener("click", ()=>launchBuiltIn(btn.getAttribute("data-open-game")));
@@ -1254,7 +1314,6 @@ document.querySelectorAll("[data-open-game]").forEach(btn=>{
 closeGame.addEventListener("click", stopAnyGame);
 
 let currentGameStop = null;
-
 function stopAnyGame(){
   if(currentGameStop) { try{currentGameStop();}catch(e){} }
   currentGameStop = null;
@@ -1265,11 +1324,10 @@ function stopAnyGame(){
 function renderInstalledGames(){
   installedGamesList.innerHTML = "";
 
-  // built-ins show as open buttons
   const built = [
-    {id:"reaction", name:"Reaction", desc:"Tap when you see GO."},
-    {id:"memory", name:"Memory", desc:"Match pairs."},
-    {id:"runner", name:"Runner", desc:"Dodge blocks."},
+    {id:"reaction", name:"Reaction"},
+    {id:"memory", name:"Memory"},
+    {id:"runner", name:"Runner"},
   ];
 
   const builtCard = document.createElement("div");
@@ -1287,7 +1345,6 @@ function renderInstalledGames(){
   builtCard.appendChild(row);
   installedGamesList.appendChild(builtCard);
 
-  // user-installed games
   const installedUser = state.userGames.filter(g=>state.installedGames.includes(g.id));
   if(installedUser.length){
     const card = document.createElement("div");
@@ -1345,7 +1402,7 @@ function launchUserGame(id){
   mountTapGame(g);
 }
 
-/* --- Reaction game --- */
+/* Reaction */
 function mountReaction(){
   gameTitle.textContent = "Reaction";
   const box = document.createElement("div");
@@ -1397,7 +1454,7 @@ function mountReaction(){
   currentGameStop = ()=>{ clearTimeout(timer); };
 }
 
-/* --- Memory game (simple 4x4) --- */
+/* Memory */
 function mountMemory(){
   gameTitle.textContent = "Memory";
   const symbols = ["🍓","🍋","🍇","🍒","🍀","⭐","⚡","💎"];
@@ -1484,7 +1541,7 @@ function mountMemory(){
   currentGameStop = ()=>{};
 }
 
-/* --- Runner game (simple canvas dodge) --- */
+/* Runner */
 function mountRunner(){
   gameTitle.textContent = "Runner";
   const wrap = document.createElement("div");
@@ -1518,48 +1575,37 @@ function mountRunner(){
     blocks=[]; score=0;
     runMsg.textContent="";
   }
-
   function spawn(){
     const w = 18 + Math.random()*34;
     blocks.push({x: Math.random()*(cv.width-w), y: -20, w, h: 14+Math.random()*18, vy: 2.4+Math.random()*2.2});
   }
-
   function draw(){
     ctx.clearRect(0,0,cv.width,cv.height);
-
-    // bg line
     ctx.globalAlpha=0.35;
     ctx.fillStyle="#ffffff";
     ctx.fillRect(0, 255, cv.width, 2);
     ctx.globalAlpha=1;
 
-    // player
     ctx.fillStyle="#26e6ff";
     ctx.fillRect(player.x, player.y, player.w, player.h);
 
-    // blocks
     ctx.fillStyle="#ff4d7d";
     blocks.forEach(b=>ctx.fillRect(b.x,b.y,b.w,b.h));
 
-    // score
     ctx.fillStyle="rgba(255,255,255,.85)";
     ctx.font="14px -apple-system,Segoe UI,Roboto";
     ctx.fillText("Score: "+score, 10, 18);
   }
-
   function step(){
     if(!running) return;
 
-    // physics
     player.x += player.vx;
     player.x = Math.max(0, Math.min(cv.width-player.w, player.x));
 
-    // blocks
     if(Math.random() < 0.05) spawn();
     blocks.forEach(b=>b.y += b.vy);
     blocks = blocks.filter(b=>b.y < cv.height+30);
 
-    // collisions
     for(const b of blocks){
       if(rectHit(player,b)){
         running=false;
@@ -1604,7 +1650,7 @@ function mountRunner(){
   };
 }
 
-/* --- User-created Tap Game --- */
+/* User Tap game */
 function mountTapGame(g){
   gameTitle.textContent = g.name;
   const wrap = document.createElement("div");
@@ -1691,7 +1737,7 @@ function shuffle(arr){
 }
 
 /* =========================
-   APP STORE (download + create games)
+   APP STORE
 ========================= */
 const BUILTIN_STORE_GAMES = [
   {id:"tap_star", name:"Star Tap", goal:40, time:20, builtIn:true, desc:"Tap fast to collect stars."},
@@ -1700,9 +1746,7 @@ const BUILTIN_STORE_GAMES = [
 ];
 
 function storeCatalog(){
-  // includes built-in catalog + user created games (as store items)
   const userStore = state.userGames.map(g=>({id:g.id, name:g.name, goal:g.goal, time:g.time, builtIn:false, desc:`User game • Goal ${g.goal} in ${g.time}s`}));
-  // ensure built-ins are present
   return [...BUILTIN_STORE_GAMES, ...userStore];
 }
 
@@ -1738,14 +1782,10 @@ function renderStore(){
     btn.addEventListener("click", ()=>{
       const id = btn.getAttribute("data-install");
       const installed = state.installedGames.includes(id);
-      if(installed){
-        toast("Already installed.");
-        return;
-      }
-      // install it
+      if(installed){ toast("Already installed."); return; }
+
       state.installedGames.push(id);
 
-      // if this is a built-in store item and not yet in userGames, add as userGames too so it can run
       const item = storeCatalog().find(x=>x.id===id);
       if(item && BUILTIN_STORE_GAMES.some(x=>x.id===id)){
         if(!state.userGames.some(g=>g.id===id)){
@@ -1781,7 +1821,6 @@ document.getElementById("createGameBtn").addEventListener("click", ()=>{
 });
 
 document.getElementById("resetStore").addEventListener("click", ()=>{
-  // keep skins/social; reset games store content to defaults
   state.userGames = [];
   state.installedGames = ["reaction","memory","runner"];
   saveState();
@@ -1790,42 +1829,59 @@ document.getElementById("resetStore").addEventListener("click", ()=>{
 });
 
 /* =========================
-   HOME APP ICONS click targets
+   ✅ BROWSER LOGIC (ONLY ADDED)
 ========================= */
-function openAppById(appId){
-  if(appId in panels) openPanel(appId);
+function normalizeUrl(input){
+  const v = input.trim();
+  if(!v) return "";
+  // If it looks like a URL but missing scheme, add https
+  const looksLikeDomain = /^[a-z0-9.-]+\.[a-z]{2,}([/:].*)?$/i.test(v);
+  if(v.startsWith("http://") || v.startsWith("https://")) return v;
+  if(looksLikeDomain) return "https://" + v;
+  // otherwise search
+  return "https://www.bing.com/search?q=" + encodeURIComponent(v);
 }
 
-/* =========================
-   DEFAULT ICON GRID SETUP
-========================= */
-renderHome();
+bUrl.addEventListener("keydown", (e)=>{
+  if(e.key==="Enter"){
+    const url = normalizeUrl(bUrl.value);
+    if(url) bFrame.src = url;
+  }
+});
+
+bBack.addEventListener("click", ()=>{
+  try{ bFrame.contentWindow.history.back(); }catch(e){ toast("Back blocked by site."); }
+});
+bFwd.addEventListener("click", ()=>{
+  try{ bFrame.contentWindow.history.forward(); }catch(e){ toast("Forward blocked by site."); }
+});
+bReload.addEventListener("click", ()=>{
+  try{ bFrame.contentWindow.location.reload(); }catch(e){ bFrame.src = bFrame.src; }
+});
+bHome.addEventListener("click", ()=>{
+  bFrame.src = "https://example.com";
+  bUrl.value = "";
+});
 
 /* =========================
-   QUICK OPEN via icon meta
+   FINAL INIT
 ========================= */
-function handleIconOpen(appId){
-  openAppById(appId);
-}
-
-/* =========================
-   MODE (Render/Ron/Toy)
-========================= */
-function applyModeFromState(){
-  setMode(state.skin.mode || "render");
-}
+function applyModeFromState(){ setMode(state.skin.mode || "render"); }
+applySkinAll();
 applyModeFromState();
+renderHome();
+renderFeed();
+renderStore();
+renderInstalledGames();
+bubble("B-Bot: Hi! Apps are loaded. Try 🌐 Browser or 🛍️ App Store.", "bot");
 
-/* =========================
-   STORAGE HELPERS
-========================= */
+/* Storage */
 function loadState(){
   try{
     const raw = localStorage.getItem(LS_KEY);
     if(!raw) return structuredClone(defaultState);
     const parsed = JSON.parse(raw);
 
-    // minimal merge
     const merged = structuredClone(defaultState);
     Object.assign(merged, parsed);
     merged.skin = {...defaultState.skin, ...(parsed.skin||{})};
@@ -1837,6 +1893,9 @@ function loadState(){
     merged.userGames = Array.isArray(parsed.userGames) ? parsed.userGames : [];
     merged.installedApps = Array.isArray(parsed.installedApps) ? parsed.installedApps : defaultState.installedApps.slice();
     merged.installedGames = Array.isArray(parsed.installedGames) ? parsed.installedGames : defaultState.installedGames.slice();
+
+    // Ensure browser exists (fix “no apps” cases)
+    if(!merged.installedApps.includes("browser")) merged.installedApps.push("browser");
     return merged;
   }catch{
     return structuredClone(defaultState);
@@ -1845,10 +1904,6 @@ function loadState(){
 function saveState(){
   localStorage.setItem(LS_KEY, JSON.stringify(state));
 }
-
-/* =========================
-   SAFE TEXT
-========================= */
 function escapeHtml(s){
   return String(s)
     .replaceAll("&","&amp;")
@@ -1861,9 +1916,7 @@ function uid(){
   return Math.random().toString(16).slice(2) + Date.now().toString(16);
 }
 
-/* =========================
-   TOAST
-========================= */
+/* Toast */
 let toastTimer=null;
 function toast(text){
   clearTimeout(toastTimer);
@@ -1895,315 +1948,124 @@ function toast(text){
     el.style.transform="translateX(-50%) translateY(0px)";
   }, 1300);
 }
+/* ======================================
+   B-BOT TEXT AI (NO MICROPHONE)
+   Learning + Voice Output
+====================================== */
 
-/* =========================
-   FIRST RENDERS
-========================= */
-renderFeed();
-renderStore();
-renderInstalledGames();
+(function(){
 
-/* =========================
-   FIX: mode buttons + store + skins state on load
-========================= */
-document.getElementById("glowRange").value = state.skin.glow ?? 55;
+const bbot = document.querySelector(".bbot");
+const pupil1 = document.getElementById("p1");
+const pupil2 = document.getElementById("p2");
 
-/* Done */
-</script>
-</body>
-</html>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>B-Bot Health System</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body{
-  margin:0;
-  background:#05070f;
-  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  color:white;
-}
+// === Chat Container (non-destructive)
+const container = document.createElement("div");
+container.style.position="absolute";
+container.style.bottom="100px";
+container.style.left="50%";
+container.style.transform="translateX(-50%)";
+container.style.width="75%";
+container.style.background="rgba(0,0,0,.65)";
+container.style.borderRadius="30px";
+container.style.padding="15px";
+container.style.backdropFilter="blur(10px)";
+container.style.boxShadow="inset 0 0 0 1px rgba(255,255,255,.1)";
+container.style.zIndex="999";
+bbot.appendChild(container);
 
-/* B-BOT BODY */
-.bbot{
-  width:420px;
-  height:720px;
-  background:linear-gradient(#fff,#e6e6e6);
-  border-radius:220px 220px 140px 140px;
-  position:relative;
-  box-shadow:0 0 120px #00ccff55;
-}
+// Output bubble
+const output = document.createElement("div");
+output.style.fontSize="14px";
+output.style.marginBottom="10px";
+output.innerText="Type something to B-Bot.";
+container.appendChild(output);
 
-/* FACE */
-.face{
-  position:absolute;
-  top:60px;
-  left:50%;
-  transform:translateX(-50%);
-  width:320px;
-  height:140px;
-  background:#000;
-  border-radius:80px;
-  display:flex;
-  justify-content:space-evenly;
-  align-items:center;
-}
+// Input field
+const input = document.createElement("input");
+input.type="text";
+input.placeholder="Talk to B-Bot...";
+input.style.width="100%";
+input.style.padding="10px";
+input.style.borderRadius="20px";
+input.style.border="none";
+input.style.outline="none";
+input.style.fontSize="14px";
+container.appendChild(input);
 
-.eye{
-  width:50px;
-  height:80px;
-  background:#00ccff;
-  border-radius:50%;
-}
+// Brain memory
+let brain = JSON.parse(localStorage.getItem("bbot_brain") || "{}");
+let learningMode = null;
 
-/* SCREEN */
-.screen{
-  position:absolute;
-  bottom:120px;
-  left:50%;
-  transform:translateX(-50%);
-  width:360px;
-  height:380px;
-  background:#111;
-  border-radius:50px;
-  padding:20px;
-  overflow:hidden;
-}
+// When user presses Enter
+input.addEventListener("keydown", function(e){
+  if(e.key === "Enter"){
+    const text = input.value.trim();
+    if(!text) return;
+    input.value="";
+    processInput(text);
+  }
+});
 
-/* APP GRID */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-}
+function processInput(text){
 
-.icon{
-  background:rgba(255,255,255,0.1);
-  border-radius:20px;
-  padding:15px;
-  text-align:center;
-  cursor:pointer;
-  transition:0.2s;
-}
+  output.innerText = "You: " + text;
 
-.icon:hover{
-  background:white;
-  color:black;
-}
-
-/* PANEL */
-.panel{
-  display:none;
-  height:100%;
-  overflow:auto;
-}
-
-.topbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:15px;
-}
-
-button{
-  padding:8px 12px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-}
-
-.btn{
-  background:#00ccff;
-}
-
-.card{
-  background:rgba(255,255,255,0.08);
-  padding:10px;
-  border-radius:15px;
-  margin-bottom:10px;
-}
-
-input{
-  width:100%;
-  padding:8px;
-  border-radius:8px;
-  border:none;
-  margin-top:5px;
-}
-</style>
-</head>
-<body>
-
-<div class="bbot">
-
-  <div class="face">
-    <div class="eye"></div>
-    <div class="eye"></div>
-  </div>
-
-  <div class="screen">
-
-    <!-- HOME -->
-    <div id="home" class="panel" style="display:block">
-      <div class="grid">
-        <div class="icon" onclick="openHealth()">🏥<br>Health</div>
-      </div>
-    </div>
-
-    <!-- HEALTH APP -->
-    <div id="healthPanel" class="panel">
-      <div class="topbar">
-        <div onclick="goHome()" style="cursor:pointer">←</div>
-        <div>Health Monitor</div>
-      </div>
-
-      <div class="card">
-        <button class="btn" onclick="enableCareMode()">Enable Care Mode 🎤</button>
-        <div id="careStatus" style="font-size:12px;margin-top:5px;color:#aaa"></div>
-      </div>
-
-      <div id="healthContent"></div>
-
-    </div>
-
-  </div>
-</div>
-
-<script>
-
-/* NAVIGATION */
-function openHealth(){
-  document.getElementById("home").style.display="none";
-  document.getElementById("healthPanel").style.display="block";
-}
-function goHome(){
-  document.getElementById("healthPanel").style.display="none";
-  document.getElementById("home").style.display="block";
-}
-
-/* HEALTH SYSTEM */
-
-let recognition;
-let answers={};
-let step=0;
-
-const questions=[
-  {key:"painLevel", text:"Rate your pain from 1 to 10"},
-  {key:"location", text:"Where does it hurt?"},
-  {key:"cause", text:"Did something happen?"},
-  {key:"dizzy", text:"Are you dizzy? (yes/no)"},
-  {key:"help", text:"Do you feel you need help? (yes/no)"}
-];
-
-function enableCareMode(){
-  const status=document.getElementById("careStatus");
-
-  if(!('webkitSpeechRecognition' in window)){
-    status.innerText="Speech recognition not supported.";
+  if(learningMode){
+    brain[learningMode] = text;
+    localStorage.setItem("bbot_brain", JSON.stringify(brain));
+    respond("Got it. I learned that.");
+    learningMode = null;
     return;
   }
 
-  recognition=new webkitSpeechRecognition();
-  recognition.continuous=true;
-  recognition.lang="en-US";
+  const lower = text.toLowerCase();
 
-  recognition.onresult=function(event){
-    const text=event.results[event.results.length-1][0].transcript.toLowerCase();
-    if(text.includes("ow")||text.includes("ouch")){
-      openHealth();
-      startQuestions();
-    }
-  };
-
-  recognition.start();
-  status.innerText="Care Mode Active 🎤 Listening...";
-}
-
-function startQuestions(){
-  answers={};
-  step=0;
-  document.getElementById("healthContent").innerHTML="";
-  askQuestion();
-}
-
-function askQuestion(){
-  if(step>=questions.length){
-    showSummary();
+  if(brain[lower]){
+    respond(brain[lower]);
     return;
   }
 
-  const q=questions[step];
-
-  const div=document.createElement("div");
-  div.className="card";
-  div.innerHTML=`
-    <b>${q.text}</b>
-    <input id="inputField">
-    <button class="btn" onclick="nextStep()">Next</button>
-  `;
-  document.getElementById("healthContent").appendChild(div);
-}
-
-function nextStep(){
-  const val=document.getElementById("inputField").value;
-  if(!val)return;
-
-  answers[questions[step].key]=val;
-  step++;
-  askQuestion();
-}
-
-function showSummary(){
-  let html="<div class='card'><h3>Summary</h3>";
-
-  html+=`Pain Level: ${answers.painLevel}<br>`;
-  html+=`Location: ${answers.location}<br>`;
-  html+=`Cause: ${answers.cause}<br>`;
-  html+=`Dizzy: ${answers.dizzy}<br>`;
-  html+=`Need Help: ${answers.help}<br><hr>`;
-
-  const pain=parseInt(answers.painLevel);
-
-  if(pain>=8||answers.help.toLowerCase().includes("yes")){
-    html+="<b style='color:#ff4d7d'>⚠ Seek medical attention immediately.</b>";
-  }
-  else if(pain>=5){
-    html+="<b>Rest, hydrate, monitor symptoms.</b>";
-  }
-  else{
-    html+="<b>Mild discomfort. Rest and observe.</b>";
+  if(lower.includes("hello") || lower.includes("hi")){
+    respond("Hello.");
+    return;
   }
 
-  html+="</div>";
+  if(lower.includes("your name")){
+    respond("I am B-Bot.");
+    return;
+  }
 
-  document.getElementById("healthContent").innerHTML+=html;
+  // If unknown → ask to learn
+  learningMode = lower;
+  respond("I do not know how to respond. What should I say?");
 }
+
+function respond(text){
+  output.innerText = "B-Bot: " + text;
+  speak(text);
+}
+
+function speak(text){
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.pitch = 1.15;
+  utter.rate = 1;
+
+  // subtle eye reaction (does not break tilt)
+  if(pupil1 && pupil2){
+    pupil1.style.transform += " scale(1.1)";
+    pupil2.style.transform += " scale(1.1)";
+    setTimeout(()=>{
+      pupil1.style.transform = pupil1.style.transform.replace(" scale(1.1)","");
+      pupil2.style.transform = pupil2.style.transform.replace(" scale(1.1)","");
+    },400);
+  }
+
+  speechSynthesis.speak(utter);
+}
+
+})();
 
 </script>
-
 </body>
-<!-- ================= HEALTH APP ================= -->
-<div class="panel" id="health">
-  <div class="topbar">
-    <div onclick="goHome()" style="cursor:pointer">←</div>
-    <div class="title">Health Monitor</div>
-  </div>
-
-  <div class="content">
-
-    <div class="card">
-      <button class="btn" onclick="enableCareMode()">Enable Care Mode 🎤</button>
-      <div id="careStatus" style="font-size:12px;margin-top:6px;color:#aaa"></div>
-    </div>
-
-    <div id="healthFlow"></div>
-
-  </div>
-</div>
 </html>
