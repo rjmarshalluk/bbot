@@ -1912,3 +1912,298 @@ document.getElementById("glowRange").value = state.skin.glow ?? 55;
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>B-Bot Health System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+  margin:0;
+  background:#05070f;
+  font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  color:white;
+}
+
+/* B-BOT BODY */
+.bbot{
+  width:420px;
+  height:720px;
+  background:linear-gradient(#fff,#e6e6e6);
+  border-radius:220px 220px 140px 140px;
+  position:relative;
+  box-shadow:0 0 120px #00ccff55;
+}
+
+/* FACE */
+.face{
+  position:absolute;
+  top:60px;
+  left:50%;
+  transform:translateX(-50%);
+  width:320px;
+  height:140px;
+  background:#000;
+  border-radius:80px;
+  display:flex;
+  justify-content:space-evenly;
+  align-items:center;
+}
+
+.eye{
+  width:50px;
+  height:80px;
+  background:#00ccff;
+  border-radius:50%;
+}
+
+/* SCREEN */
+.screen{
+  position:absolute;
+  bottom:120px;
+  left:50%;
+  transform:translateX(-50%);
+  width:360px;
+  height:380px;
+  background:#111;
+  border-radius:50px;
+  padding:20px;
+  overflow:hidden;
+}
+
+/* APP GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.icon{
+  background:rgba(255,255,255,0.1);
+  border-radius:20px;
+  padding:15px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.icon:hover{
+  background:white;
+  color:black;
+}
+
+/* PANEL */
+.panel{
+  display:none;
+  height:100%;
+  overflow:auto;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+button{
+  padding:8px 12px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.btn{
+  background:#00ccff;
+}
+
+.card{
+  background:rgba(255,255,255,0.08);
+  padding:10px;
+  border-radius:15px;
+  margin-bottom:10px;
+}
+
+input{
+  width:100%;
+  padding:8px;
+  border-radius:8px;
+  border:none;
+  margin-top:5px;
+}
+</style>
+</head>
+<body>
+
+<div class="bbot">
+
+  <div class="face">
+    <div class="eye"></div>
+    <div class="eye"></div>
+  </div>
+
+  <div class="screen">
+
+    <!-- HOME -->
+    <div id="home" class="panel" style="display:block">
+      <div class="grid">
+        <div class="icon" onclick="openHealth()">🏥<br>Health</div>
+      </div>
+    </div>
+
+    <!-- HEALTH APP -->
+    <div id="healthPanel" class="panel">
+      <div class="topbar">
+        <div onclick="goHome()" style="cursor:pointer">←</div>
+        <div>Health Monitor</div>
+      </div>
+
+      <div class="card">
+        <button class="btn" onclick="enableCareMode()">Enable Care Mode 🎤</button>
+        <div id="careStatus" style="font-size:12px;margin-top:5px;color:#aaa"></div>
+      </div>
+
+      <div id="healthContent"></div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+/* NAVIGATION */
+function openHealth(){
+  document.getElementById("home").style.display="none";
+  document.getElementById("healthPanel").style.display="block";
+}
+function goHome(){
+  document.getElementById("healthPanel").style.display="none";
+  document.getElementById("home").style.display="block";
+}
+
+/* HEALTH SYSTEM */
+
+let recognition;
+let answers={};
+let step=0;
+
+const questions=[
+  {key:"painLevel", text:"Rate your pain from 1 to 10"},
+  {key:"location", text:"Where does it hurt?"},
+  {key:"cause", text:"Did something happen?"},
+  {key:"dizzy", text:"Are you dizzy? (yes/no)"},
+  {key:"help", text:"Do you feel you need help? (yes/no)"}
+];
+
+function enableCareMode(){
+  const status=document.getElementById("careStatus");
+
+  if(!('webkitSpeechRecognition' in window)){
+    status.innerText="Speech recognition not supported.";
+    return;
+  }
+
+  recognition=new webkitSpeechRecognition();
+  recognition.continuous=true;
+  recognition.lang="en-US";
+
+  recognition.onresult=function(event){
+    const text=event.results[event.results.length-1][0].transcript.toLowerCase();
+    if(text.includes("ow")||text.includes("ouch")){
+      openHealth();
+      startQuestions();
+    }
+  };
+
+  recognition.start();
+  status.innerText="Care Mode Active 🎤 Listening...";
+}
+
+function startQuestions(){
+  answers={};
+  step=0;
+  document.getElementById("healthContent").innerHTML="";
+  askQuestion();
+}
+
+function askQuestion(){
+  if(step>=questions.length){
+    showSummary();
+    return;
+  }
+
+  const q=questions[step];
+
+  const div=document.createElement("div");
+  div.className="card";
+  div.innerHTML=`
+    <b>${q.text}</b>
+    <input id="inputField">
+    <button class="btn" onclick="nextStep()">Next</button>
+  `;
+  document.getElementById("healthContent").appendChild(div);
+}
+
+function nextStep(){
+  const val=document.getElementById("inputField").value;
+  if(!val)return;
+
+  answers[questions[step].key]=val;
+  step++;
+  askQuestion();
+}
+
+function showSummary(){
+  let html="<div class='card'><h3>Summary</h3>";
+
+  html+=`Pain Level: ${answers.painLevel}<br>`;
+  html+=`Location: ${answers.location}<br>`;
+  html+=`Cause: ${answers.cause}<br>`;
+  html+=`Dizzy: ${answers.dizzy}<br>`;
+  html+=`Need Help: ${answers.help}<br><hr>`;
+
+  const pain=parseInt(answers.painLevel);
+
+  if(pain>=8||answers.help.toLowerCase().includes("yes")){
+    html+="<b style='color:#ff4d7d'>⚠ Seek medical attention immediately.</b>";
+  }
+  else if(pain>=5){
+    html+="<b>Rest, hydrate, monitor symptoms.</b>";
+  }
+  else{
+    html+="<b>Mild discomfort. Rest and observe.</b>";
+  }
+
+  html+="</div>";
+
+  document.getElementById("healthContent").innerHTML+=html;
+}
+
+</script>
+
+</body>
+<!-- ================= HEALTH APP ================= -->
+<div class="panel" id="health">
+  <div class="topbar">
+    <div onclick="goHome()" style="cursor:pointer">←</div>
+    <div class="title">Health Monitor</div>
+  </div>
+
+  <div class="content">
+
+    <div class="card">
+      <button class="btn" onclick="enableCareMode()">Enable Care Mode 🎤</button>
+      <div id="careStatus" style="font-size:12px;margin-top:6px;color:#aaa"></div>
+    </div>
+
+    <div id="healthFlow"></div>
+
+  </div>
+</div>
+</html>
